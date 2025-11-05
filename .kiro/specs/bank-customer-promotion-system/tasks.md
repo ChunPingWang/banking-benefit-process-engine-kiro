@@ -7,20 +7,20 @@
   - 整合 Drools 規則引擎依賴
   - _需求: 1.2, 2.1, 6.1_
 
-- [ ] 2. 實作領域模型和聚合根
-  - [ ] 2.1 建立核心值物件和實體
+- [x] 2. 實作領域模型和聚合根
+  - [x] 2.1 建立核心值物件和實體
     - 實作 CustomerPayload、PromotionResult、NodeConfiguration 值物件
     - 建立 DecisionNode 抽象類別和 ConditionNode、CalculationNode 實體
     - 定義領域異常類別層次結構
     - _需求: 7.1, 7.3, 6.3_
 
-  - [ ] 2.2 實作 PromotionDecisionTree 聚合根
+  - [x] 2.2 實作 PromotionDecisionTree 聚合根
     - 建立 PromotionDecisionTree 聚合根類別
     - 實作決策樹評估邏輯和節點遍歷機制
     - 加入樹結構一致性驗證
     - _需求: 7.3, 5.1, 5.2_
 
-  - [ ] 2.3 實作 CustomerProfile 聚合根
+  - [x] 2.3 實作 CustomerProfile 聚合根
     - 建立 CustomerProfile 聚合根類別
     - 實作客戶條件評估介面
     - 加入客戶資料驗證邏輯
