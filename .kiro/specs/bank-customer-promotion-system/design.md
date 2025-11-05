@@ -10,12 +10,8 @@
 
 ```mermaid
 graph TB
-    subgraph "Presentation Layer"
-        API[REST API Controller]
-        WEB[Web Interface]
-    end
-    
     subgraph "Application Layer"
+        API[REST API Controller]
         CMD[Command Handlers]
         QRY[Query Handlers]
         APP[Application Services]
@@ -29,21 +25,24 @@ graph TB
         REPO[Repository Interfaces]
     end
     
-    subgraph "Infrastructure Layer"
+    subgraph "Adapter Layer"
         DB[(Database)]
         EXT[External Systems]
         CACHE[(Cache)]
         MSG[Message Queue]
+        REPO_IMPL[Repository Implementations]
+        EXT_ADAPTER[External System Adapters]
     end
     
     API --> CMD
     API --> QRY
-    WEB --> APP
     CMD --> DS
     QRY --> REPO
     DS --> AGG
-    REPO --> DB
-    DS --> EXT
+    REPO --> REPO_IMPL
+    DS --> EXT_ADAPTER
+    REPO_IMPL --> DB
+    EXT_ADAPTER --> EXT
     QRY --> CACHE
 ```
 
@@ -52,39 +51,53 @@ graph TB
 ```mermaid
 graph LR
     subgraph "外部世界"
-        REST[REST API]
-        WEB[Web UI]
+        REST[REST API Client]
         DB[(Database)]
         EXT[External Systems]
         RULES[Drools Engine]
+        CACHE[(Cache)]
     end
     
     subgraph "應用核心"
-        subgraph "Ports"
-            IP[Input Ports]
-            OP[Output Ports]
+        subgraph "Application Layer"
+            CTRL[REST Controllers]
+            CMD[Command Handlers]
+            QRY[Query Handlers]
+            APP[Application Services]
         end
         
-        subgraph "Domain"
-            DM[Domain Model]
+        subgraph "Domain Layer"
+            AGG[Aggregates]
+            ENT[Entities]
+            VO[Value Objects]
             DS[Domain Services]
+            PORTS[Repository Ports]
         end
     end
     
-    subgraph "Adapters"
-        CTRL[Controllers]
-        REPO[Repositories]
-        EXTADP[External Adapters]
+    subgraph "Adapter Layer"
+        REPO[Repository Adapters]
+        EXTADP[External System Adapters]
+        CACHE_ADP[Cache Adapters]
+        AUDIT_ADP[Audit Adapters]
     end
     
     REST --> CTRL
-    WEB --> CTRL
-    CTRL --> IP
-    OP --> REPO
-    OP --> EXTADP
+    CTRL --> CMD
+    CTRL --> QRY
+    CMD --> APP
+    QRY --> APP
+    APP --> DS
+    DS --> AGG
+    DS --> PORTS
+    PORTS --> REPO
+    PORTS --> EXTADP
     REPO --> DB
     EXTADP --> EXT
     EXTADP --> RULES
+    QRY --> CACHE_ADP
+    CACHE_ADP --> CACHE
+    APP --> AUDIT_ADP
 ```
 
 ## 組件和介面

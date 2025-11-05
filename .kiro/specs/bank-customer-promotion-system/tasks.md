@@ -127,7 +127,7 @@
     - 實作稽核資料查詢和報告服務
     - _需求: 6.2, 1.5, 8.5, 稽核需求_
 
-- [ ] 7. 實作資料存取層和基礎設施
+- [ ] 7. 實作資料存取層和適配器層
   - [ ] 7.1 建立資料庫 Schema 和 JPA 實體 (含稽核資料表)
     - 建立核心業務資料表結構 (decision_trees, decision_nodes, promotion_rules, promotion_history)
     - 建立稽核追蹤資料表 (audit_trails, request_logs, decision_steps, system_events)
