@@ -30,6 +30,12 @@
 - **Strategy_Pattern**: 策略模式，封裝演算法族並使其可互換的設計模式
 - **Domain_Service**: 領域服務，封裝不屬於特定實體的業務邏輯
 - **Aggregate_Root**: 聚合根，DDD中管理聚合一致性的根實體
+- **Audit_Trail**: 稽核軌跡，記錄系統處理過程中每個步驟的詳細資訊
+- **Request_Log**: 請求日誌，記錄每次外部API請求的完整資訊
+- **Decision_Step**: 決策步驟，記錄決策樹中每個節點的執行過程和結果
+- **System_Event**: 系統事件，記錄系統內部重要操作和狀態變更
+- **Audit_Service**: 稽核服務，負責收集、儲存和查詢稽核資料的服務組件
+- **Compliance_Report**: 合規報告，基於稽核資料生成的合規性檢查報告
 
 ## 需求
 
@@ -155,3 +161,20 @@
 3. THE Promotion_System SHALL 達到 90% 以上的程式碼測試覆蓋率
 4. THE Promotion_System SHALL 使用 JUnit 5 和 Mockito 進行單元測試
 5. WHEN 任何程式碼變更，THE Promotion_System SHALL 通過所有既有測試案例
+
+### 需求 11
+
+**使用者故事:** 作為合規稽核人員，我希望系統能完整記錄每次外部請求的處理軌跡，以便進行合規檢查和問題追蹤
+
+#### 驗收標準
+
+1. WHEN API_Gateway 接收到外部請求，THE Promotion_System SHALL 記錄完整的請求資訊和時間戳
+2. THE Promotion_System SHALL 記錄 Decision_Tree 中每個 Decision_Node 的執行結果和決策路徑
+3. WHEN 系統呼叫 External_System，THE Promotion_System SHALL 記錄呼叫參數、回應結果和執行時間
+4. WHEN 系統執行 Database_Integration，THE Promotion_System SHALL 記錄查詢語句和查詢結果
+5. THE Promotion_System SHALL 記錄每個 Calculation_Factor 的計算過程和最終結果
+6. THE Promotion_System SHALL 提供稽核軌跡查詢API，支援按時間範圍、客戶ID、決策樹ID等條件查詢
+7. THE Promotion_System SHALL 確保稽核資料的完整性和不可篡改性
+8. THE Promotion_System SHALL 支援稽核資料的匯出功能，格式包含CSV和JSON
+9. WHERE 系統發生異常或錯誤，THE Promotion_System SHALL 記錄詳細的錯誤資訊和堆疊追蹤
+10. THE Promotion_System SHALL 保留稽核資料至少 7 年，並支援資料歸檔和清理功能

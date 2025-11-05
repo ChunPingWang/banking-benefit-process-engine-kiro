@@ -103,6 +103,11 @@ graph LR
 - 提供條件評估介面
 - 維護客戶資料完整性
 
+**3. AuditTrail (稽核軌跡聚合)**
+- 管理完整的請求處理軌跡
+- 記錄每個決策步驟和系統事件
+- 確保稽核資料的完整性和不可篡改性
+
 #### 實體 (Entities)
 
 **DecisionNode (決策節點)**
@@ -126,6 +131,8 @@ graph LR
 #### 查詢端 (Query Side)
 - GetPromotionHistoryQuery: 查詢優惠歷史
 - GetAvailablePromotionsQuery: 查詢可用優惠
+- GetAuditTrailQuery: 查詢稽核軌跡
+- GetDecisionStepsQuery: 查詢決策步驟
 - 使用專門的讀取模型優化查詢效能
 
 ### Command Pattern 實現
@@ -225,6 +232,75 @@ CREATE TABLE promotion_history (
     executed_at TIMESTAMP,
     INDEX idx_customer_date (customer_id, executed_at)
 );
+
+-- 稽核軌跡表
+CREATE TABLE audit_trails (
+    id VARCHAR(36) PRIMARY KEY,
+    request_id VARCHAR(36) NOT NULL,
+    customer_id VARCHAR(50) NOT NULL,
+    operation_type VARCHAR(50) NOT NULL,
+    operation_details JSON NOT NULL,
+    execution_time_ms INTEGER,
+    status VARCHAR(20) NOT NULL,
+    error_message TEXT,
+    created_at TIMESTAMP NOT NULL,
+    INDEX idx_request_id (request_id),
+    INDEX idx_customer_operation (customer_id, operation_type),
+    INDEX idx_created_at (created_at)
+);
+
+-- 請求日誌表
+CREATE TABLE request_logs (
+    id VARCHAR(36) PRIMARY KEY,
+    request_id VARCHAR(36) UNIQUE NOT NULL,
+    api_endpoint VARCHAR(200) NOT NULL,
+    http_method VARCHAR(10) NOT NULL,
+    request_payload JSON NOT NULL,
+    response_payload JSON,
+    response_status INTEGER,
+    client_ip VARCHAR(45),
+    user_agent TEXT,
+    processing_time_ms INTEGER,
+    created_at TIMESTAMP NOT NULL,
+    completed_at TIMESTAMP,
+    INDEX idx_request_id (request_id),
+    INDEX idx_endpoint_date (api_endpoint, created_at)
+);
+
+-- 決策步驟表
+CREATE TABLE decision_steps (
+    id VARCHAR(36) PRIMARY KEY,
+    request_id VARCHAR(36) NOT NULL,
+    tree_id VARCHAR(36) NOT NULL,
+    node_id VARCHAR(36) NOT NULL,
+    step_order INTEGER NOT NULL,
+    node_type VARCHAR(20) NOT NULL,
+    input_data JSON NOT NULL,
+    output_data JSON,
+    execution_time_ms INTEGER,
+    status VARCHAR(20) NOT NULL,
+    error_details TEXT,
+    created_at TIMESTAMP NOT NULL,
+    INDEX idx_request_step (request_id, step_order),
+    INDEX idx_tree_node (tree_id, node_id),
+    FOREIGN KEY (request_id) REFERENCES request_logs(request_id),
+    FOREIGN KEY (tree_id) REFERENCES decision_trees(id)
+);
+
+-- 系統事件表
+CREATE TABLE system_events (
+    id VARCHAR(36) PRIMARY KEY,
+    event_type VARCHAR(50) NOT NULL,
+    event_category VARCHAR(30) NOT NULL,
+    event_details JSON NOT NULL,
+    severity_level VARCHAR(20) NOT NULL,
+    source_component VARCHAR(100) NOT NULL,
+    correlation_id VARCHAR(36),
+    created_at TIMESTAMP NOT NULL,
+    INDEX idx_event_type_date (event_type, created_at),
+    INDEX idx_correlation_id (correlation_id),
+    INDEX idx_severity_date (severity_level, created_at)
+);
 ```
 
 ### 環境配置檔案
@@ -267,6 +343,10 @@ spring:
 - PromotionSummaryView: 優惠摘要視圖
 - CustomerPromotionHistoryView: 客戶優惠歷史視圖
 - DecisionTreeConfigurationView: 決策樹配置視圖
+- AuditTrailSummaryView: 稽核軌跡摘要視圖
+- RequestProcessingView: 請求處理詳情視圖
+- DecisionPathView: 決策路徑追蹤視圖
+- ComplianceReportView: 合規性報告視圖
 
 ## 錯誤處理
 
@@ -293,12 +373,30 @@ Feature: 銀行客戶優惠推薦
     And 客戶帳戶類型為 "VIP"
     When 系統評估客戶優惠資格
     Then 應該返回 "VIP專屬理財優惠"
+    And 系統應該記錄完整的決策軌跡
+    And 稽核記錄應該包含所有決策步驟
 
   Scenario: 一般客戶獲得基礎優惠
     Given 客戶年收入為 500000 元
     And 客戶帳戶類型為 "一般"
     When 系統評估客戶優惠資格
     Then 應該返回 "新戶開戶優惠"
+    And 系統應該記錄請求和回應資料
+
+Feature: 稽核軌跡追蹤
+
+  Scenario: 查詢客戶優惠評估軌跡
+    Given 系統已處理客戶 "CUST001" 的優惠評估請求
+    When 稽核人員查詢該客戶的處理軌跡
+    Then 應該返回完整的決策路徑
+    And 應該包含每個節點的執行時間
+    And 應該包含所有外部系統呼叫記錄
+
+  Scenario: 合規性報告生成
+    Given 系統在過去30天內處理了多筆優惠評估請求
+    When 合規人員生成合規性報告
+    Then 報告應該包含所有請求的處理統計
+    And 報告應該標示任何異常或錯誤情況
 ```
 
 ### 測試層次
@@ -328,3 +426,9 @@ Feature: 銀行客戶優惠推薦
 - 敏感資料遮罩
 - 審計日誌記錄
 - 資料加密存儲
+
+### 稽核安全
+- 稽核資料不可篡改性保證
+- 稽核資料存取權限控制
+- 稽核資料備份和歸檔
+- 稽核查詢操作本身也需要稽核記錄

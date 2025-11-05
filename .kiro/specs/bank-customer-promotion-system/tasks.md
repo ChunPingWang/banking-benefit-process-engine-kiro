@@ -1,5 +1,18 @@
 # 實作計劃
 
+## 開發方式說明
+本專案採用**測試先行 (Test-First Development)** 的開發方式：
+1. **第一階段**：完成 Task 3 - 撰寫完整的 BDD 測試場景和 Gherkin 規格
+2. **Review 階段**：所有 Gherkin 規格必須經過 review 和確認
+3. **實作階段**：基於已確認的測試規格進行系統開發 (Task 4 onwards)
+
+## 稽核需求
+系統必須記錄每次外部請求的完整處理軌跡：
+- 記錄每個決策節點的執行結果
+- 追蹤所有外部系統呼叫
+- 保存完整的請求和回應資料
+- 提供稽核查詢和報告功能
+
 - [x] 1. 建立專案結構和核心配置
   - 建立 Spring Boot 3 專案結構，配置 Gradle 建置檔案
   - 設定多環境配置檔案 (dev/sit/uat/prod)
@@ -26,119 +39,135 @@
     - 加入客戶資料驗證邏輯
     - _需求: 7.1, 1.1, 1.3_
 
-- [ ] 3. 實作 Command Pattern 和節點命令
-  - [ ] 3.1 建立命令介面和基礎架構
+- [ ] 3. 撰寫 BDD 測試場景和 Gherkin 規格 (測試先行開發)
+  - [ ] 3.1 建立 Cucumber 測試框架和稽核機制
+    - 配置 Cucumber 測試環境和 Spring Boot 整合
+    - 建立測試資料初始化和清理機制
+    - 實作測試用的 Mock 外部系統
+    - 設計稽核追蹤機制和資料結構
+    - _需求: 10.1, 10.2, 6.5, 稽核需求_
+
+  - [ ] 3.2 撰寫優惠評估 BDD 場景 (含稽核追蹤)
+    - 撰寫高價值客戶 VIP 優惠場景 (包含每步驟稽核記錄)
+    - 撰寫一般客戶基礎優惠場景 (包含決策路徑追蹤)
+    - 撰寫不符合條件客戶的反向場景 (包含拒絕原因記錄)
+    - 撰寫稽核軌跡查詢和報告場景
+    - _需求: 10.2, 5.1, 5.3, 稽核需求_
+
+  - [ ] 3.3 撰寫決策樹配置和管理 BDD 場景
+    - 撰寫決策樹建立和更新場景 (包含變更稽核)
+    - 撰寫規則配置和熱更新場景 (包含版本控制)
+    - 撰寫錯誤處理和異常場景 (包含錯誤追蹤)
+    - 撰寫系統管理和監控場景
+    - _需求: 10.2, 2.2, 4.4, 稽核需求_
+
+  - [ ] 3.4 撰寫稽核和合規性 BDD 場景
+    - 撰寫完整請求生命週期稽核場景
+    - 撰寫稽核資料查詢和報告場景
+    - 撰寫合規性檢查和驗證場景
+    - 撰寫資料保留和清理場景
+    - _需求: 稽核需求, 合規性需求_
+
+- [ ] 4. 實作 Command Pattern 和節點命令
+  - [ ] 4.1 建立命令介面和基礎架構
     - 定義 NodeCommand 介面和 ExecutionContext
     - 實作命令工廠和命令註冊機制
     - 建立命令執行結果 NodeResult 類別
     - _需求: 3.1, 3.2, 3.6_
 
-  - [ ] 3.2 實作 SpEL 表達式命令
+  - [ ] 4.2 實作 SpEL 表達式命令
     - 建立 SpELConditionCommand 和 SpELCalculationCommand
     - 整合 Spring Expression Language 解析器
     - 實作表達式快取機制
     - _需求: 2.3, 2.5, 3.1_
 
-  - [ ] 3.3 實作 Drools 規則命令
+  - [ ] 4.3 實作 Drools 規則命令
     - 建立 DroolsRuleCommand 類別
     - 整合 Drools 規則引擎執行邏輯
     - 實作規則熱更新機制
     - _需求: 4.1, 4.3, 4.4_
 
-  - [ ] 3.4 實作外部系統和資料庫整合命令
+  - [ ] 4.4 實作外部系統和資料庫整合命令
     - 建立 ExternalSystemCommand 和 DatabaseQueryCommand
     - 實作外部系統適配器介面
     - 加入錯誤處理和降級策略
     - _需求: 3.4, 3.5, 2.6_
 
-- [ ] 4. 實作策略模式和狀態模式
-  - [ ] 4.1 建立計算策略模式
+- [ ] 5. 實作策略模式和狀態模式
+  - [ ] 5.1 建立計算策略模式
     - 定義 CalculationStrategy 介面
     - 實作 PercentageDiscountStrategy、TieredDiscountStrategy、FixedAmountStrategy
     - 建立 CalculationStrategyFactory 工廠類別
     - _需求: 9.2, 9.3, 5.4_
 
-  - [ ] 4.2 實作優惠狀態模式
+  - [ ] 5.2 實作優惠狀態模式
     - 建立 PromotionState 抽象類別和具體狀態類別
     - 實作狀態轉換邏輯和狀態管理
     - 加入狀態變更事件通知
     - _需求: 9.1, 9.5_
 
-- [ ] 5. 實作 CQRS 模式和應用層
-  - [ ] 5.1 建立命令端處理器
+- [ ] 6. 實作 CQRS 模式和應用層
+  - [ ] 6.1 建立命令端處理器
     - 實作 CreateDecisionTreeCommand 和對應的 CommandHandler
     - 實作 UpdatePromotionRuleCommand 和對應的 CommandHandler
     - 實作 EvaluatePromotionCommand 和對應的 CommandHandler
     - _需求: 8.1, 8.2, 1.1_
 
-  - [ ] 5.2 建立查詢端處理器
+  - [ ] 6.2 建立查詢端處理器
     - 實作 GetPromotionHistoryQuery 和對應的 QueryHandler
     - 實作 GetAvailablePromotionsQuery 和對應的 QueryHandler
     - 建立讀取模型視圖類別
     - _需求: 8.1, 8.3, 8.4_
 
-  - [ ] 5.3 實作應用服務層
+  - [ ] 6.3 實作應用服務層 (含稽核服務)
     - 建立 PromotionApplicationService 協調命令和查詢
-    - 實作事務管理和錯誤處理
+    - 實作 AuditService 記錄每個處理步驟
+    - 實作事務管理和錯誤處理 (含稽核事務)
     - 加入效能監控和日誌記錄
-    - _需求: 6.2, 1.5, 8.5_
+    - 實作稽核資料查詢和報告服務
+    - _需求: 6.2, 1.5, 8.5, 稽核需求_
 
-- [ ] 6. 實作資料存取層和基礎設施
-  - [ ] 6.1 建立資料庫 Schema 和 JPA 實體
-    - 建立資料庫表結構 (decision_trees, decision_nodes, promotion_rules, promotion_history)
-    - 實作 JPA 實體類別和對應關係
+- [ ] 7. 實作資料存取層和基礎設施
+  - [ ] 7.1 建立資料庫 Schema 和 JPA 實體 (含稽核資料表)
+    - 建立核心業務資料表結構 (decision_trees, decision_nodes, promotion_rules, promotion_history)
+    - 建立稽核追蹤資料表 (audit_trails, request_logs, decision_steps, system_events)
+    - 實作 JPA 實體類別和對應關係 (包含稽核實體)
     - 配置多環境資料庫連線 (H2/PostgreSQL)
-    - _需求: 2.1, 2.2, 6.1_
+    - 實作稽核資料自動記錄機制 (AOP/Event Listener)
+    - _需求: 2.1, 2.2, 6.1, 稽核需求_
 
-  - [ ] 6.2 實作 Repository 模式
+  - [ ] 7.2 實作 Repository 模式
     - 建立 Repository 介面和 JPA 實作
     - 實作自定義查詢方法和規格模式
     - 加入資料存取異常處理
     - _需求: 6.1, 6.2, 7.5_
 
-  - [ ] 6.3 實作快取和效能優化
+  - [ ] 7.3 實作快取和效能優化
     - 整合 Spring Cache 快取決策樹和規則配置
     - 實作非同步處理優惠歷史記錄
     - 加入資料庫連線池配置
     - _需求: 1.4, 8.5_
 
-- [ ] 7. 實作 REST API 和控制器層
-  - [ ] 7.1 建立優惠評估 API
+- [ ] 8. 實作 REST API 和控制器層
+  - [ ] 8.1 建立優惠評估 API
     - 實作 POST /api/v1/promotions/evaluate 端點
     - 加入請求資料驗證和錯誤處理
     - 實作 API 回應格式標準化
     - _需求: 1.1, 1.2, 1.3_
 
-  - [ ] 7.2 建立管理 API
+  - [ ] 8.2 建立管理 API
     - 實作決策樹配置管理 API 端點
     - 實作優惠規則管理 API 端點
     - 加入 API 安全性和權限控制
     - _需求: 2.2, 4.4, 6.1_
 
-  - [ ] 7.3 實作查詢 API
+  - [ ] 8.3 實作查詢 API (含稽核查詢)
     - 實作優惠歷史查詢 API 端點
     - 實作可用優惠查詢 API 端點
-    - 加入分頁和排序功能
-    - _需求: 5.4, 5.5, 8.3_
-
-- [ ] 8. 撰寫 BDD 測試場景和 Gherkin 規格
-  - [ ] 8.1 建立 Cucumber 測試框架
-    - 配置 Cucumber 測試環境和 Spring Boot 整合
-    - 建立測試資料初始化和清理機制
-    - 實作測試用的 Mock 外部系統
-    - _需求: 10.1, 10.2, 6.5_
-
-  - [ ] 8.2 撰寫優惠評估 BDD 場景
-    - 撰寫高價值客戶 VIP 優惠場景
-    - 撰寫一般客戶基礎優惠場景
-    - 撰寫不符合條件客戶的反向場景
-    - _需求: 10.2, 5.1, 5.3_
-
-  - [ ] 8.3 撰寫決策樹配置 BDD 場景
-    - 撰寫決策樹建立和更新場景
-    - 撰寫規則配置和熱更新場景
-    - 撰寫錯誤處理和異常場景
-    - _需求: 10.2, 2.2, 4.4_
+    - 實作稽核軌跡查詢 API 端點 (GET /api/v1/audit/trails)
+    - 實作決策步驟追蹤 API 端點 (GET /api/v1/audit/decisions)
+    - 加入分頁和排序功能 (含稽核資料)
+    - _需求: 5.4, 5.5, 8.3, 稽核需求_
 
 - [ ]* 9. 撰寫單元測試和整合測試
   - [ ]* 9.1 領域模型單元測試
