@@ -2,6 +2,7 @@ package com.bank.promotion.domain.command;
 
 import com.bank.promotion.domain.valueobject.NodeConfiguration;
 import com.bank.promotion.domain.exception.PromotionSystemException;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.function.Function;
  * 命令工廠
  * 負責創建和管理不同類型的節點命令
  */
+@Component
 public class CommandFactory {
     
     private final Map<String, Function<NodeConfiguration, NodeCommand>> commandCreators;

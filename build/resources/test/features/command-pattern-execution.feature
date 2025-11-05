@@ -6,7 +6,7 @@
     而且 測試資料已準備就緒
 
   場景: SpEL 條件命令成功執行
-    假設 系統配置了 SpEL 條件命令 "#{creditScore > 700}"
+    假設 系統配置了 SpEL 條件命令 "#creditScore > 700"
     而且 客戶信用評分為 750
     當 執行 SpEL 條件命令
     那麼 命令應該成功執行
@@ -14,14 +14,14 @@
     而且 命令類型應該為 "SPEL_CONDITION"
 
   場景: SpEL 條件命令條件不符合
-    假設 系統配置了 SpEL 條件命令 "#{creditScore > 700}"
+    假設 系統配置了 SpEL 條件命令 "#creditScore > 700"
     而且 客戶信用評分為 650
     當 執行 SpEL 條件命令
     那麼 命令應該成功執行
     而且 返回結果應該為 false
 
   場景: SpEL 計算命令執行優惠計算
-    假設 系統配置了 SpEL 計算命令 "#{accountBalance * 0.05}"
+    假設 系統配置了 SpEL 計算命令 "#accountBalance * 0.05"
     而且 客戶帳戶餘額為 500000 元
     當 執行 SpEL 計算命令
     那麼 命令應該成功執行
@@ -29,7 +29,7 @@
     而且 優惠名稱應該為 "SpEL計算優惠"
 
   場景: SpEL 計算命令使用配置參數
-    假設 系統配置了 SpEL 計算命令 "#{accountBalance * param_discountRate}"
+    假設 系統配置了 SpEL 計算命令 "#accountBalance * #param_discountRate"
     而且 配置參數 "discountRate" 為 0.03
     而且 配置參數 "promotionName" 為 "自定義優惠"
     而且 客戶帳戶餘額為 500000 元
@@ -39,7 +39,7 @@
     而且 優惠名稱應該為 "自定義優惠"
 
   場景: SpEL 命令處理無效表達式
-    假設 系統配置了 SpEL 條件命令 "#{invalidProperty}"
+    假設 系統配置了 SpEL 條件命令 "#invalidProperty"
     而且 客戶信用評分為 750
     當 執行 SpEL 條件命令
     那麼 命令應該執行失敗
@@ -57,7 +57,7 @@
           results.put("customerLevel", "HIGH_VALUE");
       end
       """
-    而且 客戶年收入為 2000000 元
+    而且 客戶年收入設定為 2000000 元
     而且 客戶信用評分為 750
     當 執行 Drools 規則命令
     那麼 命令應該成功執行
@@ -192,7 +192,7 @@
     而且 可以使用註冊器創建自定義命令實例
 
   場景: 命令執行上下文資料傳遞
-    假設 系統配置了 SpEL 條件命令 "#{contextValue > threshold}"
+    假設 系統配置了 SpEL 條件命令 "#contextValue > #threshold"
     而且 執行上下文包含資料:
       | contextValue | 150 |
       | threshold    | 100 |

@@ -59,8 +59,8 @@ public class PromotionEvaluationSteps extends BaseStepDefinitions {
         customerPayload.put("annualIncome", BigDecimal.valueOf(annualIncome));
     }
     
-    @而且("客戶帳戶類型為 {string}")
-    public void 客戶帳戶類型為(String accountType) {
+    @而且("客戶的帳戶類型為 {string}")
+    public void 客戶的帳戶類型為(String accountType) {
         customerPayload.put("accountType", accountType);
     }
     

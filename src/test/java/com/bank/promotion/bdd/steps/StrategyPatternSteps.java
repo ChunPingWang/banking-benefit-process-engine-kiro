@@ -52,8 +52,10 @@ public class StrategyPatternSteps extends BaseStepDefinitions {
     
     @而且("客戶帳戶類型為 {string}")
     public void 客戶帳戶類型為(String accountType) {
+        BigDecimal annualIncome = (testCustomer != null) ? 
+            testCustomer.getBasicInfo().getAnnualIncome() : BigDecimal.valueOf(1000000);
         CustomerPayload customerPayload = new CustomerPayload(
-            "CUST001", accountType, testCustomer.getBasicInfo().getAnnualIncome(), 
+            "CUST001", accountType, annualIncome, 
             750, "台北", 50
         );
         testCustomer = new CustomerProfile("CUST001", customerPayload);

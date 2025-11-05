@@ -3,17 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta http-equiv="x-ua-compatible" content="IE=edge"/>
-<title>Test results - FixedAmountStrategyTest</title>
+<title>Test results - TieredDiscountStrategyTest</title>
 <link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
 <link href="../css/style.css" rel="stylesheet" type="text/css"/>
 <script src="../js/report.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="content">
-<h1>FixedAmountStrategyTest</h1>
+<h1>TieredDiscountStrategyTest</h1>
 <div class="breadcrumbs">
 <a href="../index.html">all</a> &gt; 
-<a href="../packages/com.bank.promotion.strategy.html">com.bank.promotion.strategy</a> &gt; FixedAmountStrategyTest</div>
+<a href="../packages/com.bank.promotion.strategy.html">com.bank.promotion.strategy</a> &gt; TieredDiscountStrategyTest</div>
 <div id="summary">
 <table>
 <tr>
@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">10</div>
+<div class="counter">9</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.001s</div>
+<div class="counter">0s</div>
 <p>duration</p>
 </div>
 </td>
@@ -75,32 +75,32 @@
 </tr>
 </thead>
 <tr>
-<td class="success">shouldApplyMaxDiscountLimitWhenFixedAmountExceedsLimit()</td>
+<td class="success">shouldCalculateTieredDiscountForHighTier()</td>
 <td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">shouldCreatePromotionResultWithCorrectEligibility()</td>
+<td class="success">shouldCalculateTieredDiscountForLowTier()</td>
 <td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">shouldCreatePromotionResultWithIneligibilityMessage()</td>
+<td class="success">shouldCalculateTieredDiscountForMidTier()</td>
+<td class="success">0s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">shouldCreatePromotionResultWithTierDetails()</td>
 <td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">shouldReturnCorrectStrategyType()</td>
-<td class="success">0.001s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">shouldReturnFixedAmountWhenCustomerMeetsMinimumRequirement()</td>
 <td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">shouldReturnZeroWhenCustomerDoesNotMeetMinimumRequirement()</td>
+<td class="success">shouldReturnZeroForAmountBelowAllTiers()</td>
 <td class="success">0s</td>
 <td class="success">passed</td>
 </tr>
@@ -110,12 +110,7 @@
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">shouldUseAnnualIncomeEstimateWhenNoTransactionHistory()</td>
-<td class="success">0s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="success">shouldUseDefaultMinPurchaseAmountWhenNotSpecified()</td>
+<td class="success">shouldUseCustomerAnnualIncomeAsDefaultBaseAmount()</td>
 <td class="success">0s</td>
 <td class="success">passed</td>
 </tr>

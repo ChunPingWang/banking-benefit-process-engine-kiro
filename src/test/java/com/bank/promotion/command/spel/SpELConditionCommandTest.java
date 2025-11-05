@@ -40,7 +40,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldReturnTrueWhenCreditScoreConditionMet() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{creditScore > 700}");
+        NodeConfiguration config = createTestConfiguration("#creditScore > 700");
         SpELConditionCommand command = new SpELConditionCommand(config);
         
         when(mockCustomer.getCreditScore()).thenReturn(750);
@@ -56,7 +56,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldReturnFalseWhenCreditScoreConditionNotMet() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{creditScore > 700}");
+        NodeConfiguration config = createTestConfiguration("#creditScore > 700");
         SpELConditionCommand command = new SpELConditionCommand(config);
         
         when(mockCustomer.getCreditScore()).thenReturn(650);
@@ -72,7 +72,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldEvaluateComplexExpression() {
         // Given
-        String expression = "#{creditScore > 700 and annualIncome > 1000000}";
+        String expression = "#creditScore > 700 and #annualIncome > 1000000";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELConditionCommand command = new SpELConditionCommand(config);
         
@@ -90,7 +90,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldEvaluateAccountTypeCondition() {
         // Given
-        String expression = "#{accountType == 'VIP'}";
+        String expression = "#accountType == 'VIP'";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELConditionCommand command = new SpELConditionCommand(config);
         
@@ -107,7 +107,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldEvaluateAccountBalanceCondition() {
         // Given
-        String expression = "#{accountBalance >= 500000}";
+        String expression = "#accountBalance >= 500000";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELConditionCommand command = new SpELConditionCommand(config);
         
@@ -124,7 +124,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldUseContextVariables() {
         // Given
-        String expression = "#{contextValue > 100}";
+        String expression = "#contextValue > 100";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELConditionCommand command = new SpELConditionCommand(config);
         
@@ -141,7 +141,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldUseConfigurationParameters() {
         // Given
-        String expression = "#{creditScore > param_minScore}";
+        String expression = "#creditScore > #param_minScore";
         Map<String, Object> parameters = Map.of("minScore", 700);
         NodeConfiguration config = createTestConfiguration(expression, parameters);
         SpELConditionCommand command = new SpELConditionCommand(config);
@@ -159,7 +159,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldHandleNullCustomerPayload() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{creditScore > 700}");
+        NodeConfiguration config = createTestConfiguration("#creditScore > 700");
         SpELConditionCommand command = new SpELConditionCommand(config);
         
         when(mockContext.getCustomerPayload()).thenReturn(null);
@@ -175,7 +175,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldHandleInvalidExpression() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{invalidProperty}");
+        NodeConfiguration config = createTestConfiguration("#invalidProperty");
         SpELConditionCommand command = new SpELConditionCommand(config);
         
         // When
@@ -222,7 +222,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldReturnCorrectCommandType() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{true}");
+        NodeConfiguration config = createTestConfiguration("true");
         SpELConditionCommand command = new SpELConditionCommand(config);
         
         // When
@@ -235,7 +235,7 @@ class SpELConditionCommandTest {
     @Test
     void shouldValidateCorrectConfiguration() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{creditScore > 700}");
+        NodeConfiguration config = createTestConfiguration("#creditScore > 700");
         SpELConditionCommand command = new SpELConditionCommand(config);
         
         // When
@@ -249,7 +249,7 @@ class SpELConditionCommandTest {
     void shouldInvalidateWrongNodeType() {
         // Given
         NodeConfiguration config = new NodeConfiguration(
-                "test-node", "CALCULATION", "#{creditScore > 700}",
+                "test-node", "CALCULATION", "#creditScore > 700",
                 "SPEL", Map.of(), "Test configuration"
         );
         SpELConditionCommand command = new SpELConditionCommand(config);
@@ -265,7 +265,7 @@ class SpELConditionCommandTest {
     void shouldInvalidateWrongCommandType() {
         // Given
         NodeConfiguration config = new NodeConfiguration(
-                "test-node", "CONDITION", "#{creditScore > 700}",
+                "test-node", "CONDITION", "#creditScore > 700",
                 "DROOLS", Map.of(), "Test configuration"
         );
         SpELConditionCommand command = new SpELConditionCommand(config);

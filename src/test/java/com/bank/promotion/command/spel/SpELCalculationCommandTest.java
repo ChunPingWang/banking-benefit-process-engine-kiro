@@ -49,7 +49,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldCalculatePercentageDiscount() {
         // Given
-        String expression = "#{accountBalance * 0.05}"; // 5% 折扣
+        String expression = "#accountBalance * 0.05"; // 5% 折扣
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -86,7 +86,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldCalculateBasedOnCreditScore() {
         // Given
-        String expression = "#{creditScore > 700 ? 5000 : 1000}";
+        String expression = "#creditScore > 700 ? 5000 : 1000";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -103,7 +103,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldUseMinFunction() {
         // Given
-        String expression = "#{min.min(accountBalance * 0.1, 10000)}";
+        String expression = "T(java.lang.Math).min(#accountBalance * 0.1, 10000)";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -120,7 +120,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldUseMaxFunction() {
         // Given
-        String expression = "#{max.max(1000, creditScore)}";
+        String expression = "T(java.lang.Math).max(1000, #creditScore)";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -137,7 +137,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldUseRoundFunction() {
         // Given
-        String expression = "#{round.round(accountBalance * 0.0567, 0)}";
+        String expression = "T(java.lang.Math).round(#accountBalance * 0.0567)";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -154,7 +154,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldUseConfigurationParameters() {
         // Given
-        String expression = "#{accountBalance * param_discountRate}";
+        String expression = "#accountBalance * #param_discountRate";
         Map<String, Object> parameters = Map.of(
                 "discountRate", 0.03,
                 "promotionName", "自定義優惠",
@@ -177,7 +177,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldUseContextVariables() {
         // Given
-        String expression = "#{contextMultiplier * 1000}";
+        String expression = "#contextMultiplier * 1000";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -215,7 +215,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldHandleNullCustomerPayload() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{accountBalance * 0.05}");
+        NodeConfiguration config = createTestConfiguration("#accountBalance * 0.05");
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
         when(mockContext.getCustomerPayload()).thenReturn(null);
@@ -231,7 +231,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldHandleInvalidExpression() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{invalidProperty}");
+        NodeConfiguration config = createTestConfiguration("#invalidProperty");
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
         // When
@@ -245,7 +245,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldReturnZeroForNullResult() {
         // Given
-        String expression = "#{null}";
+        String expression = "null";
         NodeConfiguration config = createTestConfiguration(expression);
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
@@ -297,7 +297,7 @@ class SpELCalculationCommandTest {
     @Test
     void shouldValidateCorrectConfiguration() {
         // Given
-        NodeConfiguration config = createTestConfiguration("#{accountBalance * 0.05}");
+        NodeConfiguration config = createTestConfiguration("#accountBalance * 0.05");
         SpELCalculationCommand command = new SpELCalculationCommand(config);
         
         // When
@@ -311,7 +311,7 @@ class SpELCalculationCommandTest {
     void shouldInvalidateWrongNodeType() {
         // Given
         NodeConfiguration config = new NodeConfiguration(
-                "test-node", "CONDITION", "#{accountBalance * 0.05}",
+                "test-node", "CONDITION", "#accountBalance * 0.05",
                 "SPEL", Map.of(), "Test configuration"
         );
         SpELCalculationCommand command = new SpELCalculationCommand(config);

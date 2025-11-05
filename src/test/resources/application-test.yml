@@ -10,6 +10,12 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: false
+  
+  sql:
+    init:
+      mode: never
+      data-locations: []
+      schema-locations: []
 
 logging:
   level:

@@ -131,8 +131,8 @@ public class CommandPatternExecutionSteps {
         executionContext = new ExecutionContext(customerPayload, contextData);
     }
     
-    @而且("客戶年收入為 {int} 元")
-    public void 客戶年收入為元(int annualIncome) {
+    @而且("客戶年收入設定為 {int} 元")
+    public void 客戶年收入設定為元(int annualIncome) {
         customerPayload = new CustomerPayload(
                 customerPayload.getCustomerId(),
                 customerPayload.getAccountType(),

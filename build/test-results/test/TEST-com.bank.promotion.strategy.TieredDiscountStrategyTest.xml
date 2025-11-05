@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.bank.promotion.strategy.TieredDiscountStrategyTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-11-05T14:16:39" hostname="RexdeMacBook-Pro.local" time="0.002">
+  <properties/>
+  <testcase name="shouldCalculateTieredDiscountForHighTier()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldValidateParametersCorrectly()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldUseCustomerAnnualIncomeAsDefaultBaseAmount()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldCalculateTieredDiscountForLowTier()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldThrowExceptionForInvalidParameters()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldCreatePromotionResultWithTierDetails()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldReturnZeroForAmountBelowAllTiers()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldCalculateTieredDiscountForMidTier()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <testcase name="shouldReturnCorrectStrategyType()" classname="com.bank.promotion.strategy.TieredDiscountStrategyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
