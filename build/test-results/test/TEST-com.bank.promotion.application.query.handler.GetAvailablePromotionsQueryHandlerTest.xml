@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.bank.promotion.application.query.handler.GetAvailablePromotionsQueryHandlerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-11-05T14:35:54" hostname="RexdeMacBook-Pro.local" time="0.011">
-  <properties/>
-  <testcase name="shouldThrowExceptionWhenQueryIsNull()" classname="com.bank.promotion.application.query.handler.GetAvailablePromotionsQueryHandlerTest" time="0.001"/>
-  <testcase name="shouldReturnGeneralPromotionsForGeneralCustomer()" classname="com.bank.promotion.application.query.handler.GetAvailablePromotionsQueryHandlerTest" time="0.008"/>
-  <testcase name="shouldReturnVipPromotionsForVipCustomer()" classname="com.bank.promotion.application.query.handler.GetAvailablePromotionsQueryHandlerTest" time="0.002"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

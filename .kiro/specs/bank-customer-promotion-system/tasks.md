@@ -141,7 +141,7 @@
     - 確認程式碼品質和測試覆蓋率
     - _需求: 版本控制, 測試驗證_
 
-- [-] 6. 實作 CQRS 模式和應用層
+- [x] 6. 實作 CQRS 模式和應用層
   - [x] 6.1 建立命令端處理器
     - 實作 CreateDecisionTreeCommand 和對應的 CommandHandler
     - 實作 UpdatePromotionRuleCommand 和對應的 CommandHandler
@@ -170,7 +170,7 @@
     - 測試稽核服務的記錄功能
     - _需求: 10.3, 10.4, 8.1_
 
-  - [-] 6.5 Task 6 完成提交
+  - [x] 6.5 Task 6 完成提交
     - 執行所有相關測試確保通過
     - Git commit with message: "完成 CQRS 模式和應用層實作及測試"
     - 確認程式碼品質和測試覆蓋率
