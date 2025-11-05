@@ -376,9 +376,128 @@ spring:
 
 ## 測試策略
 
+### 測試驅動開發方法
+
+**測試先行開發流程**
+1. 每個主要功能模組完成後，必須先撰寫對應的 BDD 測試場景
+2. 使用 Mock 物件模擬所有外部依賴，確保單元測試的獨立性
+3. 透過 Dependency Injection 確保所有外部系統都可被模擬測試
+4. 測試所有錯誤處理和降級策略的執行路徑
+
+### Command Pattern 測試設計
+
+**Mock 適配器設計**
+```java
+// Mock 外部系統適配器
+@Component
+@Profile("test")
+public class MockExternalSystemAdapter implements ExternalSystemAdapter {
+    private Map<String, ExternalSystemResponse> mockResponses = new HashMap<>();
+    
+    public void configureMockResponse(String endpoint, ExternalSystemResponse response) {
+        mockResponses.put(endpoint, response);
+    }
+    
+    @Override
+    public ExternalSystemResponse call(ExternalSystemRequest request, long timeout, TimeUnit timeUnit) {
+        return mockResponses.getOrDefault(request.getEndpoint(), 
+                ExternalSystemResponse.failure("Mock not configured"));
+    }
+}
+
+// Mock 資料庫適配器
+@Component
+@Profile("test")
+public class MockDatabaseAdapter implements DatabaseAdapter {
+    private Map<String, Object> mockData = new HashMap<>();
+    
+    public void configureMockData(String query, Object result) {
+        mockData.put(query, result);
+    }
+}
+```
+
+**單元測試結構**
+```java
+@ExtendWith(MockitoExtension.class)
+class SpELConditionCommandTest {
+    
+    @Mock
+    private ExecutionContext mockContext;
+    
+    @Mock
+    private CustomerPayload mockCustomer;
+    
+    @Test
+    void shouldReturnTrueWhenConditionMet() {
+        // Given
+        NodeConfiguration config = createTestConfiguration("#{creditScore > 700}");
+        SpELConditionCommand command = new SpELConditionCommand(config);
+        
+        when(mockContext.getCustomerPayload()).thenReturn(mockCustomer);
+        when(mockCustomer.getCreditScore()).thenReturn(750);
+        
+        // When
+        NodeResult result = command.execute(mockContext);
+        
+        // Then
+        assertThat(result.isSuccess()).isTrue();
+        assertThat(result.getResult()).isEqualTo(true);
+    }
+    
+    @Test
+    void shouldHandleExpressionError() {
+        // Given - 測試錯誤處理
+        NodeConfiguration config = createTestConfiguration("#{invalidExpression}");
+        SpELConditionCommand command = new SpELConditionCommand(config);
+        
+        // When
+        NodeResult result = command.execute(mockContext);
+        
+        // Then
+        assertThat(result.isSuccess()).isFalse();
+        assertThat(result.getErrorMessage()).contains("SpEL condition evaluation failed");
+    }
+}
+```
+
 ### BDD 測試場景
 
+**Command Pattern 測試場景**
 ```gherkin
+Feature: Command Pattern 執行測試
+
+  Scenario: SpEL 條件命令成功執行
+    Given 系統配置了 SpEL 條件命令 "#{creditScore > 700}"
+    And 客戶信用評分為 750
+    When 執行 SpEL 條件命令
+    Then 命令應該成功執行
+    And 返回結果應該為 true
+
+  Scenario: Drools 規則命令執行
+    Given 系統配置了 Drools 規則 "高價值客戶判斷規則"
+    And 客戶年收入為 2000000 元
+    When 執行 Drools 規則命令
+    Then 命令應該成功執行
+    And 返回結果應該包含 "VIP客戶" 標籤
+
+  Scenario: 外部系統命令降級處理
+    Given 系統配置了外部系統命令呼叫信用評估服務
+    And 外部信用評估服務不可用
+    And 系統啟用降級策略
+    When 執行外部系統命令
+    Then 命令應該執行降級邏輯
+    And 返回預設的信用評分結果
+    And 系統應該記錄降級事件
+
+  Scenario: 資料庫查詢命令錯誤處理
+    Given 系統配置了資料庫查詢命令
+    And 資料庫連線逾時
+    When 執行資料庫查詢命令
+    Then 命令應該捕獲逾時異常
+    And 返回錯誤結果
+    And 錯誤訊息應該包含 "Database query execution failed"
+
 Feature: 銀行客戶優惠推薦
 
   Scenario: 高價值客戶獲得VIP優惠
@@ -412,10 +531,110 @@ Feature: 稽核軌跡追蹤
     And 報告應該標示任何異常或錯誤情況
 ```
 
-### 測試層次
-- 單元測試: JUnit 5 + Mockito
-- 整合測試: Spring Boot Test
-- 端到端測試: Cucumber BDD
+### 測試層次和工具
+
+**單元測試**
+- JUnit 5 + Mockito 進行單元測試
+- 使用 @MockBean 模擬 Spring 組件
+- 測試覆蓋率目標：90% 以上
+
+**整合測試**
+- Spring Boot Test 進行整合測試
+- 使用 @TestConfiguration 配置測試環境
+- 使用 H2 記憶體資料庫進行資料層測試
+
+**端到端測試**
+- Cucumber BDD 進行端到端測試
+- 使用 @SpringBootTest 啟動完整應用上下文
+- 模擬真實的 HTTP 請求和回應
+
+**測試資料管理**
+```java
+@Component
+public class TestDataManager {
+    
+    public CustomerPayload createHighValueCustomer() {
+        return new CustomerPayload(
+            "CUST001", "VIP", 
+            BigDecimal.valueOf(2000000), 750, 
+            BigDecimal.valueOf(500000), 
+            createMockTransactionHistory()
+        );
+    }
+    
+    public NodeConfiguration createSpELConditionConfig(String expression) {
+        return new NodeConfiguration(
+            "test-node", "CONDITION", expression, 
+            "SPEL", Map.of(), "Test SpEL condition"
+        );
+    }
+    
+    public void setupMockExternalSystem(String endpoint, Object response) {
+        // 配置 Mock 外部系統回應
+    }
+}
+```
+
+### 錯誤處理測試
+
+**異常情境測試**
+- 測試所有可能的異常路徑
+- 驗證錯誤訊息的準確性
+- 確保系統在異常情況下的穩定性
+
+**降級策略測試**
+- 模擬外部系統不可用情境
+- 驗證降級邏輯的正確執行
+- 測試降級後的功能完整性
+
+## 版本控制和開發流程
+
+### Git 提交規範
+
+**提交訊息格式**
+- 使用中文提交訊息
+- 格式：`完成[功能模組名稱]實作及測試`
+- 範例：
+  - `完成 Command Pattern 和節點命令實作及測試`
+  - `完成策略模式和狀態模式實作及測試`
+  - `完成 CQRS 模式和應用層實作及測試`
+
+**提交前檢查清單**
+1. 所有相關單元測試通過
+2. 所有相關 BDD 測試通過
+3. 程式碼覆蓋率達到 90% 以上
+4. 程式碼品質檢查通過
+5. 功能實作完整且符合需求
+
+### 開發工作流程
+
+**每個任務完成流程**
+1. **實作階段**：完成功能模組的核心實作
+2. **測試階段**：撰寫單元測試和 BDD 測試
+3. **驗證階段**：執行所有測試確保通過
+4. **提交階段**：使用規範格式進行 Git commit
+5. **文件階段**：更新相關技術文件
+
+**測試驅動開發循環**
+```
+需求分析 → BDD 場景撰寫 → 功能實作 → 單元測試 → 整合測試 → Git 提交
+    ↑                                                                    ↓
+    ←←←←←←←←←←←←←← 回歸測試和品質檢查 ←←←←←←←←←←←←←←←←←←←←←←←←←
+```
+
+### 測試策略整合
+
+**分層測試架構**
+- **單元測試層**：測試個別類別和方法
+- **整合測試層**：測試組件間的互動
+- **BDD 測試層**：測試業務場景和使用者故事
+- **端到端測試層**：測試完整的業務流程
+
+**持續整合要求**
+- 每次 commit 觸發自動化測試
+- 測試失敗時阻止合併
+- 自動產生測試覆蓋率報告
+- 自動檢查程式碼品質指標
 
 ## 效能考量
 

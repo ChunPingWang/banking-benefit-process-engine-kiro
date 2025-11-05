@@ -161,6 +161,11 @@
 3. THE Promotion_System SHALL 達到 90% 以上的程式碼測試覆蓋率
 4. THE Promotion_System SHALL 使用 JUnit 5 和 Mockito 進行單元測試
 5. WHEN 任何程式碼變更，THE Promotion_System SHALL 通過所有既有測試案例
+6. WHEN 每個主要功能模組完成開發，THE Promotion_System SHALL 先撰寫對應的 BDD 測試場景
+7. THE Promotion_System SHALL 為所有 Command_Pattern 實作建立 Mock 物件用於單元測試
+8. THE Promotion_System SHALL 使用 Dependency_Injection 確保所有外部依賴都可被模擬測試
+9. WHERE 外部系統尚未開發完成，THE Promotion_System SHALL 使用 Mock_Adapter 進行測試
+10. THE Promotion_System SHALL 測試所有錯誤處理和降級策略的執行路徑
 
 ### 需求 11
 
@@ -178,3 +183,20 @@
 8. THE Promotion_System SHALL 支援稽核資料的匯出功能，格式包含CSV和JSON
 9. WHERE 系統發生異常或錯誤，THE Promotion_System SHALL 記錄詳細的錯誤資訊和堆疊追蹤
 10. THE Promotion_System SHALL 保留稽核資料至少 7 年，並支援資料歸檔和清理功能
+
+### 需求 12
+
+**使用者故事:** 作為開發團隊成員，我希望系統採用規範的版本控制和測試流程，以便確保程式碼品質和專案可追蹤性
+
+#### 驗收標準
+
+1. WHEN 每個主要功能模組完成開發，THE 開發團隊 SHALL 撰寫對應的單元測試和 BDD 測試
+2. THE 開發團隊 SHALL 使用中文提交訊息進行 Git commit，格式為 "完成[功能模組名稱]實作及測試"
+3. WHEN 進行 Git commit 前，THE Promotion_System SHALL 通過所有相關測試案例
+4. THE Promotion_System SHALL 達到 90% 以上的測試覆蓋率
+5. WHEN 任何測試失敗，THE 開發團隊 SHALL 修復問題後才能進行 commit
+6. THE 開發團隊 SHALL 為每個外部依賴建立 Mock 實作用於測試
+7. THE 開發團隊 SHALL 使用 Dependency Injection 確保所有組件可被獨立測試
+8. WHEN 功能模組包含錯誤處理邏輯，THE 開發團隊 SHALL 撰寫對應的錯誤情境測試
+9. THE 開發團隊 SHALL 在每個 commit 中包含功能實作和對應測試
+10. THE Promotion_System SHALL 維護清晰的 Git 提交歷史以便追蹤開發進度

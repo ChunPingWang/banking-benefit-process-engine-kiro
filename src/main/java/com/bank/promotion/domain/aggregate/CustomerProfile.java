@@ -1,6 +1,7 @@
 package com.bank.promotion.domain.aggregate;
 
 import com.bank.promotion.domain.valueobject.CustomerPayload;
+import com.bank.promotion.domain.valueobject.ValidationResult;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -335,38 +336,7 @@ public class CustomerProfile {
     }
 }
 
-/**
- * 交易記錄值物件
- */
-class TransactionRecord {
-    private final String transactionId;
-    private final BigDecimal amount;
-    private final String type;
-    private final LocalDateTime timestamp;
-    
-    public TransactionRecord(String transactionId, BigDecimal amount, String type, LocalDateTime timestamp) {
-        this.transactionId = transactionId;
-        this.amount = amount;
-        this.type = type;
-        this.timestamp = timestamp;
-    }
-    
-    public String getTransactionId() {
-        return transactionId;
-    }
-    
-    public BigDecimal getAmount() {
-        return amount;
-    }
-    
-    public String getType() {
-        return type;
-    }
-    
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-}
+
 
 /**
  * 信用檔案值物件

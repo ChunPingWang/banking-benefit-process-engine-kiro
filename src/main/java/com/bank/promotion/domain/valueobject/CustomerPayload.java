@@ -15,15 +15,26 @@ public final class CustomerPayload {
     private final Integer creditScore;
     private final String region;
     private final Integer transactionCount;
+    private final BigDecimal accountBalance;
+    private final java.util.List<Object> transactionHistory;
     
     public CustomerPayload(String customerId, String accountType, BigDecimal annualIncome, 
                           Integer creditScore, String region, Integer transactionCount) {
+        this(customerId, accountType, annualIncome, creditScore, region, transactionCount, null, null);
+    }
+    
+    public CustomerPayload(String customerId, String accountType, BigDecimal annualIncome, 
+                          Integer creditScore, String region, Integer transactionCount,
+                          BigDecimal accountBalance, java.util.List<Object> transactionHistory) {
         this.customerId = validateCustomerId(customerId);
         this.accountType = validateAccountType(accountType);
         this.annualIncome = validateAnnualIncome(annualIncome);
         this.creditScore = validateCreditScore(creditScore);
         this.region = validateRegion(region);
         this.transactionCount = validateTransactionCount(transactionCount);
+        this.accountBalance = accountBalance;
+        this.transactionHistory = transactionHistory != null ? 
+            java.util.List.copyOf(transactionHistory) : java.util.List.of();
     }
     
     private String validateCustomerId(String customerId) {
@@ -92,6 +103,14 @@ public final class CustomerPayload {
         return transactionCount;
     }
     
+    public BigDecimal getAccountBalance() {
+        return accountBalance;
+    }
+    
+    public java.util.List<Object> getTransactionHistory() {
+        return transactionHistory;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,12 +121,14 @@ public final class CustomerPayload {
                Objects.equals(annualIncome, that.annualIncome) &&
                Objects.equals(creditScore, that.creditScore) &&
                Objects.equals(region, that.region) &&
-               Objects.equals(transactionCount, that.transactionCount);
+               Objects.equals(transactionCount, that.transactionCount) &&
+               Objects.equals(accountBalance, that.accountBalance) &&
+               Objects.equals(transactionHistory, that.transactionHistory);
     }
     
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, accountType, annualIncome, creditScore, region, transactionCount);
+        return Objects.hash(customerId, accountType, annualIncome, creditScore, region, transactionCount, accountBalance, transactionHistory);
     }
     
     @Override
@@ -119,6 +140,8 @@ public final class CustomerPayload {
                ", creditScore=" + creditScore +
                ", region='" + region + '\'' +
                ", transactionCount=" + transactionCount +
+               ", accountBalance=" + accountBalance +
+               ", transactionHistorySize=" + (transactionHistory != null ? transactionHistory.size() : 0) +
                '}';
     }
 }
