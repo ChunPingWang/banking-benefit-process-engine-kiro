@@ -10,10 +10,20 @@ src/
 │   ├── java/com/bank/promotion/
 │   │   ├── PromotionSystemApplication.java     # 主應用程式
 │   │   ├── domain/                             # 領域層
+│   │   │   ├── aggregate/                     # 聚合根
+│   │   │   ├── entity/                        # 實體
+│   │   │   ├── valueobject/                   # 值物件
+│   │   │   └── exception/                     # 領域異常
 │   │   ├── application/                        # 應用層
-│   │   ├── infrastructure/                     # 基礎設施層
-│   │   │   └── config/                        # 配置類別
-│   │   └── presentation/                       # 展示層
+│   │   │   ├── command/                       # 命令處理器
+│   │   │   ├── query/                         # 查詢處理器
+│   │   │   ├── service/                       # 應用服務
+│   │   │   └── controller/                    # REST API 控制器
+│   │   └── adapter/                           # 適配器層
+│   │       ├── config/                        # 配置類別
+│   │       ├── repository/                    # 資料庫適配器
+│   │       ├── external/                      # 外部系統適配器
+│   │       └── audit/                         # 稽核適配器
 │   └── resources/
 │       ├── application*.yml                    # 多環境配置
 │       ├── schema.sql                          # 資料庫結構
@@ -21,7 +31,11 @@ src/
 │       └── rules/                             # Drools規則檔案
 └── test/
     ├── java/                                  # 測試程式碼
-    └── resources/                             # 測試資源
+    │   ├── unit/                              # 單元測試
+│   │   ├── integration/                       # 整合測試
+│   │   └── bdd/                               # BDD測試
+│   └── resources/                             # 測試資源
+│       └── features/                          # Gherkin規格檔案
 ```
 
 ## 技術棧
@@ -101,23 +115,67 @@ src/
 - 應用資訊: http://localhost:8080/actuator/info
 - 效能指標: http://localhost:8080/actuator/metrics
 
-## 開發指南
+## 架構設計
+
+### 六角形架構 (Hexagonal Architecture)
+
+本專案採用六角形架構，分為三個主要層次：
+
+#### 🏛️ **應用層 (Application Layer)**
+- **REST API Controllers**: 處理 HTTP 請求和回應
+- **Command Handlers**: 處理寫入操作的命令
+- **Query Handlers**: 處理讀取操作的查詢
+- **Application Services**: 協調業務流程和事務管理
+
+#### 🎯 **領域層 (Domain Layer)**
+- **Aggregates**: 聚合根，管理業務一致性
+- **Entities**: 實體，具有唯一識別的業務物件
+- **Value Objects**: 值物件，不可變的業務概念
+- **Domain Services**: 領域服務，跨實體的業務邏輯
+- **Repository Interfaces**: 資料存取的抽象介面
+
+#### 🔌 **適配器層 (Adapter Layer)**
+- **Repository Adapters**: 資料庫存取的具體實作
+- **External System Adapters**: 外部系統整合適配器
+- **Cache Adapters**: 快取系統適配器
+- **Audit Adapters**: 稽核系統適配器
+
+### 開發原則
 
 本專案遵循:
 - **六角形架構** (Hexagonal Architecture)
 - **領域驅動設計** (Domain Driven Design)
 - **CQRS模式** (Command Query Responsibility Segregation)
-- **測試驅動開發** (Test Driven Development)
+- **測試先行開發** (Test-First Development)
+- **BDD行為驅動開發** (Behavior Driven Development)
 
-## 下一步
+## 開發流程
 
-專案結構已建立完成，可以開始實作:
-1. 領域模型和聚合根
-2. Command Pattern 和節點命令
-3. 策略模式和狀態模式
-4. CQRS 模式和應用層
-5. 資料存取層和基礎設施
-6. REST API 和控制器層
-7. BDD 測試場景
+### 🧪 **測試先行開發**
+
+本專案採用測試先行的開發方式：
+
+1. **第一階段**: 撰寫 BDD 測試場景和 Gherkin 規格
+2. **Review 階段**: 所有測試規格必須經過 review 和確認  
+3. **實作階段**: 基於已確認的測試規格進行系統開發
+
+### 📋 **實作順序**
+
+1. ✅ **專案結構和核心配置** - 已完成
+2. ✅ **領域模型和聚合根** - 已完成
+3. 🔄 **BDD 測試場景和 Gherkin 規格** - 進行中
+4. **Command Pattern 和節點命令**
+5. **策略模式和狀態模式**
+6. **CQRS 模式和應用層**
+7. **資料存取層和適配器層**
+8. **REST API 和控制器層**
+
+### 🔍 **稽核功能**
+
+系統內建完整的稽核追蹤機制：
+- 記錄每次外部請求的完整處理軌跡
+- 追蹤所有決策節點的執行過程
+- 保存外部系統呼叫和資料庫查詢記錄
+- 提供合規性報告和稽核查詢功能
 
 詳細實作計劃請參考 `.kiro/specs/bank-customer-promotion-system/tasks.md`

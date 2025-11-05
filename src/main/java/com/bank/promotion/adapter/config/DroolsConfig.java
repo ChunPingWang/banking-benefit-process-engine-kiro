@@ -1,4 +1,4 @@
-package com.bank.promotion.infrastructure.config;
+package com.bank.promotion.adapter.config;
 
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
