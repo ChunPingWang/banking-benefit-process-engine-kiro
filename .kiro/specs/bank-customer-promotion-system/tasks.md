@@ -115,7 +115,7 @@
   - [x] 4.6 Task 4 完成提交
     - _已提交: "完成 Command Pattern 和節點命令實作及測試"_
 
-- [-] 5. 實作策略模式和狀態模式
+- [x] 5. 實作策略模式和狀態模式
   - [x] 5.1 建立計算策略模式
     - 定義 CalculationStrategy 介面
     - 實作 PercentageDiscountStrategy、TieredDiscountStrategy、FixedAmountStrategy

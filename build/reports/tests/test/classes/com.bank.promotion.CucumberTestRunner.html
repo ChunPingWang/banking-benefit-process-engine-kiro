@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">5.353s</div>
+<div class="counter">4.749s</div>
 <p>duration</p>
 </div>
 </td>
@@ -2805,17 +2805,17 @@ public void 系統狀態應該保持一致性() {
 </thead>
 <tr>
 <td class="success">Drools 規則命令執行高價值客戶判斷</td>
-<td class="success">0.859s</td>
+<td class="success">0.702s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">Drools 規則命令計算優惠金額</td>
-<td class="success">0.046s</td>
+<td class="success">0.050s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">Drools 規則執行錯誤處理</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -2825,7 +2825,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">SpEL 條件命令成功執行</td>
-<td class="success">0.075s</td>
+<td class="success">0.059s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -2840,22 +2840,22 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">SpEL 計算命令執行優惠計算</td>
-<td class="success">0.012s</td>
+<td class="success">0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">一般客戶獲得基礎優惠 (包含決策路徑追蹤)</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.010s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">不符合條件客戶的反向場景 (包含拒絕原因記錄)</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.011s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">並發衝突異常處理</td>
-<td class="failures">0.007s</td>
+<td class="failures">0.010s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -2865,7 +2865,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">合規性檢查和驗證</td>
-<td class="failures">0.032s</td>
+<td class="failures">0.030s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -2875,7 +2875,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">命令執行上下文資料傳遞</td>
-<td class="failures">0.007s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -2885,22 +2885,22 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">命令工廠創建不同類型的命令</td>
-<td class="failures">0.009s</td>
-<td class="failures">failed</td>
-</tr>
-<tr>
-<td class="failures">命令工廠處理不支援的命令類型</td>
 <td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
+<td class="failures">命令工廠處理不支援的命令類型</td>
+<td class="failures">0.009s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
 <td class="failures">命令註冊器動態註冊新命令</td>
-<td class="failures">0.007s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="success">固定金額策略 - 不符合最低購買要求</td>
-<td class="success">0.006s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -2910,22 +2910,22 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">外部系統命令成功呼叫</td>
-<td class="failures">0.117s</td>
+<td class="failures">0.115s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">外部系統命令計算優惠</td>
-<td class="failures">0.014s</td>
+<td class="failures">0.015s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">外部系統命令計算降級處理</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">外部系統命令超時處理</td>
-<td class="failures">0.019s</td>
+<td class="failures">0.018s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -2935,17 +2935,17 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">外部系統連線超時處理</td>
-<td class="success">0.009s</td>
+<td class="success">0.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">完整請求生命週期稽核記錄</td>
-<td class="success">3.490s</td>
+<td class="success">3.037s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">建立新的決策樹 (包含變更稽核)</td>
-<td class="failures">0.017s</td>
+<td class="failures">0.016s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -2960,17 +2960,17 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">新客戶獲得開戶優惠</td>
-<td class="failures">0.008s</td>
+<td class="failures">0.012s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="success">暫停優惠啟用時發現已過期</td>
-<td class="success">0.007s</td>
+<td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">暫停優惠更新暫停原因</td>
-<td class="success">0.007s</td>
+<td class="success">0.008s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -2985,7 +2985,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">暫停優惠轉換為過期狀態</td>
-<td class="success">0.006s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -2995,12 +2995,12 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">更新現有決策樹配置 (包含版本控制)</td>
-<td class="success">0.007s</td>
+<td class="success">0.009s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">查詢外部系統呼叫記錄</td>
-<td class="failures">0.012s</td>
+<td class="failures">0.009s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3010,17 +3010,17 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">查詢特定客戶的優惠評估軌跡</td>
-<td class="failures">0.018s</td>
+<td class="failures">0.014s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">決策樹執行異常處理</td>
-<td class="failures">0.006s</td>
+<td class="failures">0.007s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">決策樹版本回滾</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.010s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3030,7 +3030,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">活躍優惠狀態評估</td>
-<td class="success">0.010s</td>
+<td class="success">0.011s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -3050,17 +3050,17 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">活躍優惠重複啟用失敗</td>
-<td class="success">0.005s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">異常交易模式檢測和報告</td>
-<td class="failures">0.015s</td>
+<td class="failures">0.014s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">異常情況稽核追蹤</td>
-<td class="failures">0.010s</td>
+<td class="failures">0.009s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3075,27 +3075,27 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">監管機構稽核支援和資料提供</td>
-<td class="failures">0.014s</td>
-<td class="failures">failed</td>
-</tr>
-<tr>
-<td class="failures">稽核系統效能和可用性監控</td>
 <td class="failures">0.012s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
-<td class="failures">稽核資料完整性和不可篡改性驗證</td>
+<td class="failures">稽核系統效能和可用性監控</td>
 <td class="failures">0.013s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
+<td class="failures">稽核資料完整性和不可篡改性驗證</td>
+<td class="failures">0.012s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
 <td class="failures">稽核資料完整性驗證</td>
-<td class="failures">0.010s</td>
+<td class="failures">0.009s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">稽核資料查詢和報告生成</td>
-<td class="failures">0.026s</td>
+<td class="failures">0.027s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3105,7 +3105,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">策略參數驗證 - 無效參數</td>
-<td class="success">0.005s</td>
+<td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -3115,7 +3115,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">系統異常處理和錯誤追蹤</td>
-<td class="failures">0.007s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3125,7 +3125,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">系統自動過期檢查 - 有效優惠</td>
-<td class="success">0.006s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -3135,7 +3135,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">系統過載保護機制</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3145,27 +3145,27 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">規則配置和熱更新 (包含版本控制)</td>
-<td class="failures">0.009s</td>
+<td class="failures">0.010s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">記憶體不足異常處理</td>
-<td class="failures">0.008s</td>
+<td class="failures">0.012s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">資料保留和清理管理</td>
-<td class="failures">0.014s</td>
+<td class="failures">0.013s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">資料完整性異常處理</td>
-<td class="failures">0.007s</td>
+<td class="failures">0.008s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
 <td class="failures">資料庫查詢命令成功執行</td>
-<td class="failures">0.010s</td>
+<td class="failures">0.011s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
@@ -3205,27 +3205,27 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="success">過期優惠重複過期失敗</td>
-<td class="success">0.005s</td>
-<td class="success">passed</td>
-</tr>
-<tr>
-<td class="failures">錯誤處理和異常場景 (包含錯誤追蹤)</td>
-<td class="failures">0.008s</td>
-<td class="failures">failed</td>
-</tr>
-<tr>
-<td class="success">階層式折扣策略 - 不符合任何階層</td>
 <td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">階層式折扣策略 - 中階層客戶</td>
+<td class="failures">錯誤處理和異常場景 (包含錯誤追蹤)</td>
+<td class="failures">0.009s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="success">階層式折扣策略 - 不符合任何階層</td>
 <td class="success">0.006s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
+<td class="success">階層式折扣策略 - 中階層客戶</td>
+<td class="success">0.008s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">階層式折扣策略 - 低階層客戶</td>
-<td class="success">0.006s</td>
+<td class="success">0.007s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
@@ -3235,7 +3235,7 @@ public void 系統狀態應該保持一致性() {
 </tr>
 <tr>
 <td class="failures">高價值客戶獲得VIP優惠 (包含每步驟稽核記錄)</td>
-<td class="failures">0.012s</td>
+<td class="failures">0.014s</td>
 <td class="failures">failed</td>
 </tr>
 </table>
@@ -3243,8 +3243,8 @@ public void 系統狀態應該保持一致性() {
 <div id="tab2" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>22:16:34.001 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bank.promotion.bdd.CucumberSpringConfiguration]: CucumberSpringConfiguration does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-22:16:34.068 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bank.promotion.PromotionSystemApplication for test class com.bank.promotion.bdd.CucumberSpringConfiguration
+<pre>22:26:47.131 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bank.promotion.bdd.CucumberSpringConfiguration]: CucumberSpringConfiguration does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:26:47.185 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bank.promotion.PromotionSystemApplication for test class com.bank.promotion.bdd.CucumberSpringConfiguration
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -3254,18 +3254,18 @@ public void 系統狀態應該保持一致性() {
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.0)
 
-2025-11-05 22:16:34 - Starting CucumberSpringConfiguration using Java 17.0.9 with PID 46046 (started by rexwang in /Users/rexwang/workspace/banking-benefit-process-engine-kiro)
-2025-11-05 22:16:34 - Running with Spring Boot v3.2.0, Spring v6.1.1
-2025-11-05 22:16:34 - The following 1 profile is active: &quot;test&quot;
-2025-11-05 22:16:35 - Starting service [Tomcat]
-2025-11-05 22:16:35 - Starting Servlet engine: [Apache Tomcat/10.1.16]
-2025-11-05 22:16:35 - Initializing Spring embedded WebApplicationContext
-2025-11-05 22:16:35 - HikariPool-1 - Starting...
-2025-11-05 22:16:36 - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2025-11-05 22:16:36 - HikariPool-1 - Start completed.
-2025-11-05 22:16:36 - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-11-05 22:16:36 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-11-05 22:16:36 - Started CucumberSpringConfiguration in 2.787 seconds (process running for 4.064)
+2025-11-05 22:26:47 - Starting CucumberSpringConfiguration using Java 17.0.9 with PID 53184 (started by rexwang in /Users/rexwang/workspace/banking-benefit-process-engine-kiro)
+2025-11-05 22:26:47 - Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-05 22:26:47 - The following 1 profile is active: &quot;test&quot;
+2025-11-05 22:26:48 - Starting service [Tomcat]
+2025-11-05 22:26:48 - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-11-05 22:26:48 - Initializing Spring embedded WebApplicationContext
+2025-11-05 22:26:48 - HikariPool-1 - Starting...
+2025-11-05 22:26:48 - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-11-05 22:26:48 - HikariPool-1 - Start completed.
+2025-11-05 22:26:48 - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-05 22:26:49 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-05 22:26:49 - Started CucumberSpringConfiguration in 2.418 seconds (process running for 3.536)
 
 場景: 完整請求生命週期稽核記錄                     ?[90m# features/audit-compliance.feature:13?[0m
   ?[32m假設?[0m?[32m稽核和合規系統已啟動?[0m                       ?[90m# com.bank.promotion.bdd.steps.AuditComplianceSteps.稽核和合規系統已啟動()?[0m
@@ -3647,10 +3647,10 @@ Expecting value to be false but was true
   ?[32m而且?[0m?[32mDrools 規則內容為:?[0m                 ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.Drools規則內容為(java.lang.String)?[0m
   ?[32m而且?[0m?[32m客戶年收入設定為 ?[0m?[32m?[1m2000000?[0m?[32m 元?[0m            ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.客戶年收入設定為元(int)?[0m
   ?[32m而且?[0m?[32m客戶信用評分為 ?[0m?[32m?[1m750?[0m                   ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.客戶信用評分為(int)?[0m
-2025-11-05 22:16:37 - File 'rules/高價值客戶判斷規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-2025-11-05 22:16:38 - File 'rules/temp_validation_1762352198531.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-2025-11-05 22:16:38 - Start creation of KieBase: defaultKieBase
-2025-11-05 22:16:38 - End creation of KieBase: defaultKieBase
+2025-11-05 22:26:50 - File 'rules/高價值客戶判斷規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+2025-11-05 22:26:51 - File 'rules/temp_validation_1762352811041.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+2025-11-05 22:26:51 - Start creation of KieBase: defaultKieBase
+2025-11-05 22:26:51 - End creation of KieBase: defaultKieBase
   ?[32m當?[0m?[32m執行 Drools 規則命令?[0m                 ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.執行Drools規則命令()?[0m
   ?[32m那麼?[0m?[32m命令應該成功執行?[0m                      ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.命令應該成功執行()?[0m
   ?[32m而且?[0m?[32m返回結果應該為 true?[0m                  ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.返回結果應該為true()?[0m
@@ -3661,10 +3661,10 @@ Expecting value to be false but was true
   ?[32m假設?[0m?[32m系統配置了 Drools 計算命令 ?[0m?[32m?[1m&quot;優惠金額計算規則&quot;?[0m ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.系統配置了Drools計算命令(java.lang.String)?[0m
   ?[32m而且?[0m?[32mDrools 規則內容為:?[0m                ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.Drools規則內容為(java.lang.String)?[0m
   ?[32m而且?[0m?[32m客戶帳戶餘額為 ?[0m?[32m?[1m500000?[0m?[32m 元?[0m             ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.客戶帳戶餘額為元(int)?[0m
-2025-11-05 22:16:38 - File 'rules/優惠金額計算規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-2025-11-05 22:16:38 - File 'rules/temp_validation_1762352198660.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-2025-11-05 22:16:38 - Start creation of KieBase: defaultKieBase
-2025-11-05 22:16:38 - End creation of KieBase: defaultKieBase
+2025-11-05 22:26:51 - File 'rules/優惠金額計算規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+2025-11-05 22:26:51 - File 'rules/temp_validation_1762352811169.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+2025-11-05 22:26:51 - Start creation of KieBase: defaultKieBase
+2025-11-05 22:26:51 - End creation of KieBase: defaultKieBase
   ?[32m當?[0m?[32m執行 Drools 計算命令?[0m                ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.執行Drools計算命令()?[0m
   ?[32m那麼?[0m?[32m命令應該成功執行?[0m                     ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.命令應該成功執行()?[0m
   ?[32m而且?[0m?[32m返回優惠結果應該包含折扣金額 ?[0m?[32m?[1m10000?[0m?[32m 元?[0m       ?[90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.返回優惠結果應該包含折扣金額元(int)?[0m
@@ -4671,7 +4671,7 @@ but was:
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.5</a> at 2025年11月5日 下午10:16:39</p>
+<a href="http://www.gradle.org">Gradle 8.5</a> at 2025年11月5日 下午10:26:52</p>
 </div>
 </div>
 </body>

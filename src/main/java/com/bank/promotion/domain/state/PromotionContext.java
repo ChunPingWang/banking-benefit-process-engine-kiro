@@ -3,6 +3,7 @@ package com.bank.promotion.domain.state;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -207,7 +208,7 @@ public class PromotionContext {
      * @return 屬性映射的副本
      */
     public Map<String, Object> getAllProperties() {
-        return Map.copyOf(properties);
+        return new HashMap<>(properties);
     }
     
     // Getters

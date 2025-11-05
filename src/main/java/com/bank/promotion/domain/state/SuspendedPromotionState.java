@@ -86,8 +86,10 @@ public class SuspendedPromotionState extends PromotionState {
         // 檢查是否超過最大暫停期限
         Integer maxSuspensionDays = context.getTypedProperty("maxSuspensionDays", Integer.class);
         if (maxSuspensionDays != null && maxSuspensionDays > 0) {
-            LocalDateTime maxSuspensionUntil = suspendedAt.plusDays(maxSuspensionDays);
-            return LocalDateTime.now().isBefore(maxSuspensionUntil);
+            LocalDateTime maxSuspensionUntil = getSuspendedAt().plusDays(maxSuspensionDays);
+            if (LocalDateTime.now().isAfter(maxSuspensionUntil)) {
+                return false;
+            }
         }
         
         // 檢查優惠本身的有效期
@@ -114,13 +116,13 @@ public class SuspendedPromotionState extends PromotionState {
         super.onEnter(context, previousState);
         
         // 記錄暫停相關資訊
-        context.setProperty("suspendedAt", suspendedAt);
+        context.setProperty("suspendedAt", getSuspendedAt());
         context.setProperty("suspensionReason", suspensionReason);
         context.setProperty("previousStateBeforeSuspension", previousState.getStateName());
         
         context.addStateChangeEvent(
             String.format("優惠被暫停，原因: %s", suspensionReason), 
-            suspendedAt
+            getSuspendedAt()
         );
     }
     
@@ -133,7 +135,7 @@ public class SuspendedPromotionState extends PromotionState {
         context.setProperty("suspensionEndedAt", suspensionEndedAt);
         
         // 計算暫停持續時間
-        long suspensionDurationHours = java.time.Duration.between(suspendedAt, suspensionEndedAt).toHours();
+        long suspensionDurationHours = java.time.Duration.between(getSuspendedAt(), suspensionEndedAt).toHours();
         context.setProperty("suspensionDurationHours", suspensionDurationHours);
         
         if (nextState instanceof ActivePromotionState) {
@@ -156,7 +158,7 @@ public class SuspendedPromotionState extends PromotionState {
         // 檢查是否超過最大暫停期限
         Integer maxSuspensionDays = context.getTypedProperty("maxSuspensionDays", Integer.class);
         if (maxSuspensionDays != null && maxSuspensionDays > 0) {
-            LocalDateTime maxSuspensionUntil = suspendedAt.plusDays(maxSuspensionDays);
+            LocalDateTime maxSuspensionUntil = getSuspendedAt().plusDays(maxSuspensionDays);
             if (LocalDateTime.now().isAfter(maxSuspensionUntil)) {
                 return false;
             }
@@ -177,13 +179,13 @@ public class SuspendedPromotionState extends PromotionState {
             "customerId", customer.getCustomerId(),
             "evaluationTimestamp", LocalDateTime.now(),
             "suspensionReason", suspensionReason,
-            "suspendedAt", suspendedAt,
+            "suspendedAt", getSuspendedAt(),
             "contextProperties", context.getAllProperties()
         );
         
         String description = String.format("優惠已暫停，暫停原因: %s，暫停時間: %s", 
                                          suspensionReason, 
-                                         suspendedAt.toString());
+                                         getSuspendedAt().toString());
         
         return new PromotionResult(
             promotionId,

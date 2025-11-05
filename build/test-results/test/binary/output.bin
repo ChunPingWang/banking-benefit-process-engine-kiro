@@ -1,5 +1,5 @@
-�22:16:34.001 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bank.promotion.bdd.CucumberSpringConfiguration]: CucumberSpringConfiguration does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-�22:16:34.068 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bank.promotion.PromotionSystemApplication for test class com.bank.promotion.bdd.CucumberSpringConfiguration
+�22:26:47.131 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bank.promotion.bdd.CucumberSpringConfiguration]: CucumberSpringConfiguration does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+�22:26:47.185 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bank.promotion.PromotionSystemApplication for test class com.bank.promotion.bdd.CucumberSpringConfiguration
 
 (  .   ____          _            __ _ _
 ) /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -9,18 +9,18 @@
 ) =========|_|==============|___/=/_/_/_/
 + :: Spring Boot ::                (v3.2.0)
 
-�2025-11-05 22:16:34 - Starting CucumberSpringConfiguration using Java 17.0.9 with PID 46046 (started by rexwang in /Users/rexwang/workspace/banking-benefit-process-engine-kiro)
-E2025-11-05 22:16:34 - Running with Spring Boot v3.2.0, Spring v6.1.1
-@2025-11-05 22:16:34 - The following 1 profile is active: "test"
-02025-11-05 22:16:35 - Starting service [Tomcat]
-G2025-11-05 22:16:35 - Starting Servlet engine: [Apache Tomcat/10.1.16]
-I2025-11-05 22:16:35 - Initializing Spring embedded WebApplicationContext
-12025-11-05 22:16:35 - HikariPool-1 - Starting...
-\2025-11-05 22:16:36 - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-62025-11-05 22:16:36 - HikariPool-1 - Start completed.
-�2025-11-05 22:16:36 - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-�2025-11-05 22:16:36 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-g2025-11-05 22:16:36 - Started CucumberSpringConfiguration in 2.787 seconds (process running for 4.064)
+�2025-11-05 22:26:47 - Starting CucumberSpringConfiguration using Java 17.0.9 with PID 53184 (started by rexwang in /Users/rexwang/workspace/banking-benefit-process-engine-kiro)
+E2025-11-05 22:26:47 - Running with Spring Boot v3.2.0, Spring v6.1.1
+@2025-11-05 22:26:47 - The following 1 profile is active: "test"
+02025-11-05 22:26:48 - Starting service [Tomcat]
+G2025-11-05 22:26:48 - Starting Servlet engine: [Apache Tomcat/10.1.16]
+I2025-11-05 22:26:48 - Initializing Spring embedded WebApplicationContext
+12025-11-05 22:26:48 - HikariPool-1 - Starting...
+\2025-11-05 22:26:48 - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+62025-11-05 22:26:48 - HikariPool-1 - Start completed.
+�2025-11-05 22:26:48 - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+�2025-11-05 22:26:49 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+g2025-11-05 22:26:49 - Started CucumberSpringConfiguration in 2.418 seconds (process running for 3.536)
 
 q場景: 完整請求生命週期稽核記錄                     [90m# features/audit-compliance.feature:13[0m
 �  [32m假設[0m[32m稽核和合規系統已啟動[0m                       [90m# com.bank.promotion.bdd.steps.AuditComplianceSteps.稽核和合規系統已啟動()[0m
@@ -423,10 +423,10 @@ K  [36m而且[0m[36m跨系統整合過程應該被完整稽核記錄[0m
 �  [32m而且[0m[32mDrools 規則內容為:[0m                 [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.Drools規則內容為(java.lang.String)[0m
 �  [32m而且[0m[32m客戶年收入設定為 [0m[32m[1m2000000[0m[32m 元[0m            [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.客戶年收入設定為元(int)[0m
 �  [32m而且[0m[32m客戶信用評分為 [0m[32m[1m750[0m                   [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.客戶信用評分為(int)[0m
-�2025-11-05 22:16:37 - File 'rules/高價值客戶判斷規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-�2025-11-05 22:16:38 - File 'rules/temp_validation_1762352198531.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-@2025-11-05 22:16:38 - Start creation of KieBase: defaultKieBase
->2025-11-05 22:16:38 - End creation of KieBase: defaultKieBase
+�2025-11-05 22:26:50 - File 'rules/高價值客戶判斷規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+�2025-11-05 22:26:51 - File 'rules/temp_validation_1762352811041.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+@2025-11-05 22:26:51 - Start creation of KieBase: defaultKieBase
+>2025-11-05 22:26:51 - End creation of KieBase: defaultKieBase
 �  [32m當[0m[32m執行 Drools 規則命令[0m                 [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.執行Drools規則命令()[0m
 �  [32m那麼[0m[32m命令應該成功執行[0m                      [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.命令應該成功執行()[0m
 �  [32m而且[0m[32m返回結果應該為 true[0m                  [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.返回結果應該為true()[0m
@@ -437,10 +437,10 @@ K  [36m而且[0m[36m跨系統整合過程應該被完整稽核記錄[0m
 �  [32m假設[0m[32m系統配置了 Drools 計算命令 [0m[32m[1m"優惠金額計算規則"[0m [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.系統配置了Drools計算命令(java.lang.String)[0m
 �  [32m而且[0m[32mDrools 規則內容為:[0m                [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.Drools規則內容為(java.lang.String)[0m
 �  [32m而且[0m[32m客戶帳戶餘額為 [0m[32m[1m500000[0m[32m 元[0m             [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.客戶帳戶餘額為元(int)[0m
-�2025-11-05 22:16:38 - File 'rules/優惠金額計算規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-�2025-11-05 22:16:38 - File 'rules/temp_validation_1762352198660.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
-@2025-11-05 22:16:38 - Start creation of KieBase: defaultKieBase
->2025-11-05 22:16:38 - End creation of KieBase: defaultKieBase
+�2025-11-05 22:26:51 - File 'rules/優惠金額計算規則.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+�2025-11-05 22:26:51 - File 'rules/temp_validation_1762352811169.drl' is in folder 'rules' but declares package 'com.bank.promotion.rules'. It is advised to have a correspondance between package and folder names.
+@2025-11-05 22:26:51 - Start creation of KieBase: defaultKieBase
+>2025-11-05 22:26:51 - End creation of KieBase: defaultKieBase
 �  [32m當[0m[32m執行 Drools 計算命令[0m                [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.執行Drools計算命令()[0m
 �  [32m那麼[0m[32m命令應該成功執行[0m                     [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.命令應該成功執行()[0m
 �  [32m而且[0m[32m返回優惠結果應該包含折扣金額 [0m[32m[1m10000[0m[32m 元[0m       [90m# com.bank.promotion.bdd.steps.CommandPatternExecutionSteps.返回優惠結果應該包含折扣金額元(int)[0m
