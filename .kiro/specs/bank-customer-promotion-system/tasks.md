@@ -141,20 +141,20 @@
     - 確認程式碼品質和測試覆蓋率
     - _需求: 版本控制, 測試驗證_
 
-- [ ] 6. 實作 CQRS 模式和應用層
-  - [ ] 6.1 建立命令端處理器
+- [-] 6. 實作 CQRS 模式和應用層
+  - [x] 6.1 建立命令端處理器
     - 實作 CreateDecisionTreeCommand 和對應的 CommandHandler
     - 實作 UpdatePromotionRuleCommand 和對應的 CommandHandler
     - 實作 EvaluatePromotionCommand 和對應的 CommandHandler
     - _需求: 8.1, 8.2, 1.1_
 
-  - [ ] 6.2 建立查詢端處理器
+  - [x] 6.2 建立查詢端處理器
     - 實作 GetPromotionHistoryQuery 和對應的 QueryHandler
     - 實作 GetAvailablePromotionsQuery 和對應的 QueryHandler
     - 建立讀取模型視圖類別
     - _需求: 8.1, 8.3, 8.4_
 
-  - [ ] 6.3 實作應用服務層 (含稽核服務)
+  - [x] 6.3 實作應用服務層 (含稽核服務)
     - 建立 PromotionApplicationService 協調命令和查詢
     - 實作 AuditService 記錄每個處理步驟
     - 實作事務管理和錯誤處理 (含稽核事務)
@@ -162,7 +162,7 @@
     - 實作稽核資料查詢和報告服務
     - _需求: 6.2, 1.5, 8.5, 稽核需求_
 
-  - [ ] 6.4 CQRS 模式和應用層測試實作
+  - [x] 6.4 CQRS 模式和應用層測試實作
     - 撰寫 CommandHandler 和 QueryHandler 單元測試
     - 撰寫 ApplicationService 整合測試
     - 撰寫 CQRS 模式的端到端測試
@@ -170,7 +170,7 @@
     - 測試稽核服務的記錄功能
     - _需求: 10.3, 10.4, 8.1_
 
-  - [ ] 6.5 Task 6 完成提交
+  - [-] 6.5 Task 6 完成提交
     - 執行所有相關測試確保通過
     - Git commit with message: "完成 CQRS 模式和應用層實作及測試"
     - 確認程式碼品質和測試覆蓋率
