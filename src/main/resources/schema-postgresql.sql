@@ -1,3 +1,6 @@
+-- PostgreSQL Schema for Bank Customer Promotion System
+-- This schema uses PostgreSQL-specific features like JSON data type
+
 -- Core Business Tables
 
 -- Decision Trees Table
@@ -10,13 +13,13 @@ CREATE TABLE IF NOT EXISTS decision_trees (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Decision Nodes Table (H2 uses TEXT for JSON-like data)
+-- Decision Nodes Table (PostgreSQL JSON support)
 CREATE TABLE IF NOT EXISTS decision_nodes (
     id VARCHAR(36) PRIMARY KEY,
     tree_id VARCHAR(36) NOT NULL,
     node_type VARCHAR(20) NOT NULL,
     parent_id VARCHAR(36),
-    configuration TEXT NOT NULL,
+    configuration JSON NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tree_id) REFERENCES decision_trees(id)
 );
@@ -27,7 +30,7 @@ CREATE TABLE IF NOT EXISTS promotion_rules (
     name VARCHAR(100) NOT NULL,
     rule_type VARCHAR(20) NOT NULL,
     rule_content TEXT NOT NULL,
-    parameters TEXT,
+    parameters JSON,
     status VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -38,7 +41,7 @@ CREATE TABLE IF NOT EXISTS promotion_history (
     id VARCHAR(36) PRIMARY KEY,
     customer_id VARCHAR(50) NOT NULL,
     promotion_id VARCHAR(36) NOT NULL,
-    promotion_result TEXT NOT NULL,
+    promotion_result JSON NOT NULL,
     executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -50,8 +53,8 @@ CREATE TABLE IF NOT EXISTS request_logs (
     request_id VARCHAR(36) UNIQUE NOT NULL,
     api_endpoint VARCHAR(200) NOT NULL,
     http_method VARCHAR(10) NOT NULL,
-    request_payload TEXT NOT NULL,
-    response_payload TEXT,
+    request_payload JSON NOT NULL,
+    response_payload JSON,
     response_status INTEGER,
     client_ip VARCHAR(45),
     user_agent TEXT,
@@ -66,7 +69,7 @@ CREATE TABLE IF NOT EXISTS audit_trails (
     request_id VARCHAR(36) NOT NULL,
     customer_id VARCHAR(50) NOT NULL,
     operation_type VARCHAR(50) NOT NULL,
-    operation_details TEXT NOT NULL,
+    operation_details JSON NOT NULL,
     execution_time_ms INTEGER,
     status VARCHAR(20) NOT NULL,
     error_message TEXT,
@@ -81,8 +84,8 @@ CREATE TABLE IF NOT EXISTS decision_steps (
     node_id VARCHAR(36) NOT NULL,
     step_order INTEGER NOT NULL,
     node_type VARCHAR(20) NOT NULL,
-    input_data TEXT NOT NULL,
-    output_data TEXT,
+    input_data JSON NOT NULL,
+    output_data JSON,
     execution_time_ms INTEGER,
     status VARCHAR(20) NOT NULL,
     error_details TEXT,
@@ -96,7 +99,7 @@ CREATE TABLE IF NOT EXISTS system_events (
     id VARCHAR(36) PRIMARY KEY,
     event_type VARCHAR(50) NOT NULL,
     event_category VARCHAR(30) NOT NULL,
-    event_details TEXT NOT NULL,
+    event_details JSON NOT NULL,
     severity_level VARCHAR(20) NOT NULL,
     source_component VARCHAR(100) NOT NULL,
     correlation_id VARCHAR(36),
@@ -119,3 +122,8 @@ CREATE INDEX IF NOT EXISTS idx_decision_tree_node ON decision_steps(tree_id, nod
 CREATE INDEX IF NOT EXISTS idx_event_type_date ON system_events(event_type, created_at);
 CREATE INDEX IF NOT EXISTS idx_event_correlation_id ON system_events(correlation_id);
 CREATE INDEX IF NOT EXISTS idx_event_severity_date ON system_events(severity_level, created_at);
+
+-- PostgreSQL-specific optimizations
+CREATE INDEX IF NOT EXISTS idx_decision_nodes_config_gin ON decision_nodes USING GIN (configuration);
+CREATE INDEX IF NOT EXISTS idx_promotion_rules_params_gin ON promotion_rules USING GIN (parameters);
+CREATE INDEX IF NOT EXISTS idx_audit_details_gin ON audit_trails USING GIN (operation_details);

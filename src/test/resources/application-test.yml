@@ -4,20 +4,46 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password: 
+    hikari:
+      maximum-pool-size: 2
+      minimum-idle: 1
+      connection-timeout: 10000
+      idle-timeout: 300000
+      max-lifetime: 600000
+  
+  h2:
+    console:
+      enabled: false
   
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
     show-sql: false
-  
+    properties:
+      hibernate:
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          batch_size: 10
+
+  cache:
+    type: simple
+
   sql:
     init:
-      mode: never
-      data-locations: []
-      schema-locations: []
+      mode: embedded
 
 logging:
   level:
     com.bank.promotion: DEBUG
     org.springframework: WARN
+    org.hibernate: WARN
+    org.springframework.cache: DEBUG
+
+server:
+  port: 0  # Random port for tests
+
+# Disable Drools for tests
+drools:
+  enabled: false

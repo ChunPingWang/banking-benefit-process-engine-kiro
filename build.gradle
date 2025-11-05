@@ -29,6 +29,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     
+    // Cache implementation
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+    
     // Database drivers
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
