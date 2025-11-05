@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.bank.promotion.PromotionSystemApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-05T08:35:29" hostname="RexdeMacBook-Pro.local" time="0.421">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.bank.promotion.PromotionSystemApplicationTests" time="0.421"/>
+  <system-out><![CDATA[16:35:27.004 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.bank.promotion.PromotionSystemApplicationTests]: PromotionSystemApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:35:27.055 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.bank.promotion.PromotionSystemApplication for test class com.bank.promotion.PromotionSystemApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-11-05 16:35:27 - Starting PromotionSystemApplicationTests using Java 17.0.9 with PID 68065 (started by rexwang in /Users/rexwang/workspace/banking-benefit-process-engine-kiro)
+2025-11-05 16:35:27 - Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-05 16:35:27 - The following 1 profile is active: "dev"
+2025-11-05 16:35:27 - Refreshing org.springframework.web.context.support.GenericWebApplicationContext@3e84111a
+2025-11-05 16:35:27 - HikariPool-1 - Starting...
+2025-11-05 16:35:28 - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2025-11-05 16:35:28 - HikariPool-1 - Start completed.
+2025-11-05 16:35:28 - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-11-05 16:35:28 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-05 16:35:28 - 2 mappings in 'requestMappingHandlerMapping'
+2025-11-05 16:35:28 - Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-11-05 16:35:28 - ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-11-05 16:35:28 - ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-11-05 16:35:29 - Started PromotionSystemApplicationTests in 2.161 seconds (process running for 2.766)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

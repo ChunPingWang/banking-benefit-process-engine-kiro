@@ -1,6 +1,6 @@
 # 實作計劃
 
-- [ ] 1. 建立專案結構和核心配置
+- [x] 1. 建立專案結構和核心配置
   - 建立 Spring Boot 3 專案結構，配置 Gradle 建置檔案
   - 設定多環境配置檔案 (dev/sit/uat/prod)
   - 配置 H2 和 PostgreSQL 資料庫連線

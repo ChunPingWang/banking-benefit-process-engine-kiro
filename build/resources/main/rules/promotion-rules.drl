@@ -1,0 +1,28 @@
+package com.bank.promotion.rules;
+
+import com.bank.promotion.domain.model.CustomerProfile;
+import com.bank.promotion.domain.model.PromotionResult;
+
+// Sample rule for VIP customers
+rule "VIP Customer Promotion"
+    when
+        $customer : CustomerProfile(accountType == "VIP", annualIncome >= 2000000)
+    then
+        PromotionResult result = new PromotionResult();
+        result.setPromotionName("VIP專屬理財優惠");
+        result.setDiscountRate(0.15);
+        result.setDescription("VIP客戶專享15%優惠利率");
+        insert(result);
+end
+
+// Sample rule for regular customers
+rule "Regular Customer Promotion"
+    when
+        $customer : CustomerProfile(accountType == "一般", annualIncome >= 500000)
+    then
+        PromotionResult result = new PromotionResult();
+        result.setPromotionName("新戶開戶優惠");
+        result.setDiscountRate(0.05);
+        result.setDescription("新戶開戶享5%優惠利率");
+        insert(result);
+end
