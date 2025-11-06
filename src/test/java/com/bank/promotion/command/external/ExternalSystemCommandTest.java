@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,22 +23,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
+import org.mockito.Mockito;
+
 /**
  * 外部系統命令單元測試
  */
-@ExtendWith(MockitoExtension.class)
 class ExternalSystemCommandTest {
     
-    @Mock
     private ExecutionContext mockContext;
-    
-    @Mock
     private CustomerPayload mockCustomer;
-    
     private MockExternalSystemAdapter mockAdapter;
     
     @BeforeEach
     void setUp() {
+        mockContext = Mockito.mock(ExecutionContext.class);
+        mockCustomer = Mockito.mock(CustomerPayload.class);
+        
         when(mockContext.getCustomerPayload()).thenReturn(mockCustomer);
         when(mockContext.getContextData()).thenReturn(Map.of());
         
@@ -57,7 +57,7 @@ class ExternalSystemCommandTest {
     void shouldExecuteConditionCommandSuccessfully() {
         // Given
         NodeConfiguration config = createConditionConfiguration("http://test-endpoint");
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 回應
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockSuccessResponse(
@@ -66,7 +66,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -80,7 +80,7 @@ class ExternalSystemCommandTest {
     void shouldExecuteCalculationCommandSuccessfully() {
         // Given
         NodeConfiguration config = createCalculationConfiguration("http://test-endpoint");
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 回應
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockSuccessResponse(
@@ -93,7 +93,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -103,7 +103,7 @@ class ExternalSystemCommandTest {
         assertThat(result.getResult()).isInstanceOf(PromotionResult.class);
         
         PromotionResult promotionResult = (PromotionResult) result.getResult();
-        assertThat(promotionResult.getDiscountAmount()).isEqualTo(BigDecimal.valueOf(5000.0));
+        assertThat(promotionResult.getDiscountAmount()).isEqualByComparingTo(BigDecimal.valueOf(5000));
         assertThat(promotionResult.getPromotionName()).isEqualTo("外部系統優惠");
         assertThat(promotionResult.getPromotionType()).isEqualTo("EXTERNAL_CALCULATED");
     }
@@ -112,7 +112,7 @@ class ExternalSystemCommandTest {
     void shouldHandleConditionWithStringResult() {
         // Given
         NodeConfiguration config = createConditionConfiguration("http://test-endpoint");
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 回應 - 字串結果
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockSuccessResponse(
@@ -121,7 +121,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -135,7 +135,7 @@ class ExternalSystemCommandTest {
     void shouldHandleConditionWithNumericResult() {
         // Given
         NodeConfiguration config = createConditionConfiguration("http://test-endpoint");
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 回應 - 數字結果
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockSuccessResponse(
@@ -144,7 +144,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -158,7 +158,7 @@ class ExternalSystemCommandTest {
     void shouldHandleEmptyResponseAsTrue() {
         // Given
         NodeConfiguration config = createConditionConfiguration("http://test-endpoint");
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 回應 - 有資料但沒有 conditionResult
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockSuccessResponse(
@@ -167,7 +167,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -187,7 +187,7 @@ class ExternalSystemCommandTest {
                 "fallbackConditionValue", false
         );
         NodeConfiguration config = createConditionConfiguration("http://test-endpoint", parameters);
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 失敗回應
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockFailureResponse(
@@ -196,7 +196,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -217,7 +217,7 @@ class ExternalSystemCommandTest {
                 "fallbackPromotionName", "降級優惠"
         );
         NodeConfiguration config = createCalculationConfiguration("http://test-endpoint", parameters);
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 失敗回應
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockFailureResponse(
@@ -226,7 +226,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -236,7 +236,7 @@ class ExternalSystemCommandTest {
         assertThat(result.getResult()).isInstanceOf(PromotionResult.class);
         
         PromotionResult promotionResult = (PromotionResult) result.getResult();
-        assertThat(promotionResult.getDiscountAmount()).isEqualTo(BigDecimal.valueOf(1000.0));
+        assertThat(promotionResult.getDiscountAmount()).isEqualByComparingTo(BigDecimal.valueOf(1000));
         assertThat(promotionResult.getPromotionName()).isEqualTo("降級優惠");
         assertThat(promotionResult.getPromotionType()).isEqualTo("FALLBACK");
     }
@@ -250,7 +250,7 @@ class ExternalSystemCommandTest {
                 "enableFallback", false
         );
         NodeConfiguration config = createConditionConfiguration("http://test-endpoint", parameters);
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // 配置 Mock 失敗回應
         ExternalSystemResponse mockResponse = MockExternalSystemAdapter.createMockFailureResponse(
@@ -259,7 +259,7 @@ class ExternalSystemCommandTest {
         mockAdapter.configureMockResponse("http://test-endpoint", mockResponse);
         
         // 使用反射設定 Mock 適配器
-        ReflectionTestUtils.setField(command, "adapter", mockAdapter);
+        // mockAdapter 已通過構造函數注入
         
         // When
         NodeResult result = command.execute(mockContext);
@@ -316,7 +316,7 @@ class ExternalSystemCommandTest {
     void shouldReturnCorrectCommandTypeForCalculation() {
         // Given
         NodeConfiguration config = createCalculationConfiguration("http://test-endpoint");
-        ExternalSystemCommand command = new ExternalSystemCommand(config);
+        ExternalSystemCommand command = new ExternalSystemCommand(config, mockAdapter);
         
         // When
         String commandType = command.getCommandType();

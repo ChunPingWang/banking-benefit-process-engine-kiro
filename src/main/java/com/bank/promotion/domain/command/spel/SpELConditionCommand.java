@@ -38,6 +38,12 @@ public class SpELConditionCommand extends AbstractNodeCommand {
     @Override
     protected NodeResult doExecute(ExecutionContext context) {
         try {
+            // 檢查必要的上下文資料
+            if (context.getCustomerPayload() == null) {
+                return NodeResult.failure("Customer payload is required for SpEL condition evaluation", 
+                    new IllegalArgumentException("Customer payload cannot be null"));
+            }
+            
             // 建立 SpEL 評估上下文
             StandardEvaluationContext evaluationContext = createEvaluationContext(context);
             
@@ -72,6 +78,15 @@ public class SpELConditionCommand extends AbstractNodeCommand {
             evaluationContext.setVariable("creditScore", context.getCustomerPayload().getCreditScore());
             evaluationContext.setVariable("accountBalance", context.getCustomerPayload().getAccountBalance());
             evaluationContext.setVariable("transactionHistory", context.getCustomerPayload().getTransactionHistory());
+        } else {
+            // 如果客戶資料為 null，設定預設值以避免 SpEL 表達式錯誤
+            evaluationContext.setVariable("customer", null);
+            evaluationContext.setVariable("customerId", null);
+            evaluationContext.setVariable("accountType", null);
+            evaluationContext.setVariable("annualIncome", null);
+            evaluationContext.setVariable("creditScore", null);
+            evaluationContext.setVariable("accountBalance", null);
+            evaluationContext.setVariable("transactionHistory", null);
         }
         
         // 設定上下文資料變數

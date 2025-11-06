@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Collection;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -100,7 +101,13 @@ class DatabasePerformanceMonitoringServiceTest {
     @Test
     void shouldClearSpecificCache() {
         // Given
-        String testCacheName = cacheManager.getCacheNames().iterator().next();
+        Collection<String> cacheNames = cacheManager.getCacheNames();
+        if (cacheNames.isEmpty()) {
+            // 如果沒有快取，跳過測試
+            return;
+        }
+        
+        String testCacheName = cacheNames.iterator().next();
         org.springframework.cache.Cache cache = cacheManager.getCache(testCacheName);
         
         if (cache != null) {

@@ -35,6 +35,18 @@ public class ExternalSystemCommand extends AbstractNodeCommand {
     }
     
     /**
+     * 測試專用構造函數，允許注入 mock adapter
+     */
+    public ExternalSystemCommand(NodeConfiguration configuration, ExternalSystemAdapter adapter) {
+        super(configuration);
+        
+        this.isConditionCommand = "CONDITION".equals(configuration.getNodeType());
+        this.timeoutSeconds = getIntParameter("timeoutSeconds", 30);
+        this.enableFallback = getBooleanParameter("enableFallback", true);
+        this.adapter = adapter;
+    }
+    
+    /**
      * 建立外部系統適配器
      */
     private ExternalSystemAdapter createAdapter(NodeConfiguration configuration) {

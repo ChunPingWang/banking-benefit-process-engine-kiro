@@ -77,4 +77,6 @@ public class PromotionController {
                 .body(ApiResponse.error("SYSTEM_ERROR", "系統處理時發生錯誤: " + e.getMessage()));
         }
     }
+    
+
 }

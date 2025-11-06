@@ -111,6 +111,12 @@ public class MockExternalSystemAdapter implements ExternalSystemAdapter {
             return endpointParam.toString();
         }
         
+        // 如果沒有端點參數，檢查是否有配置的 mock 回應
+        // 使用第一個配置的端點作為預設
+        if (!mockResponses.isEmpty()) {
+            return mockResponses.keySet().iterator().next();
+        }
+        
         // 使用請求ID作為預設端點
         return request.getRequestId();
     }

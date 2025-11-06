@@ -4,8 +4,9 @@ import com.bank.promotion.adapter.web.dto.EvaluatePromotionRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,9 +21,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureWebMvc
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
+@Import(com.bank.promotion.bdd.BddTestConfiguration.class)
 class PromotionApiIntegrationTest {
     
     @Autowired
@@ -52,6 +54,7 @@ class PromotionApiIntegrationTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldGetAvailablePromotionsEndToEnd() throws Exception {
         // When & Then
         mockMvc.perform(get("/api/v1/promotions/available")

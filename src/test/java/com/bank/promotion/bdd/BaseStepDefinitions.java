@@ -3,13 +3,22 @@ package com.bank.promotion.bdd;
 import com.bank.promotion.bdd.audit.TestAuditTracker;
 import com.bank.promotion.bdd.mock.MockExternalSystemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
- * BDD 測試基礎類別
- * 提供共用的測試設定和工具方法
+ * BDD Test Base Class
+ * Provides shared test configuration and utility methods
  */
+@SpringBootTest(
+    classes = com.bank.promotion.PromotionSystemApplication.class,
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
+@ActiveProfiles("test")
+@ContextConfiguration(classes = {BddTestConfiguration.class})
 public class BaseStepDefinitions {
     
     @LocalServerPort

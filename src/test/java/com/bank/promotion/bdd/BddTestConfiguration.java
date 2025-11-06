@@ -90,4 +90,40 @@ public class BddTestConfiguration {
     public DecisionNodeRepository decisionNodeRepository() {
         return Mockito.mock(DecisionNodeRepository.class);
     }
+    
+    @Bean
+    @Primary
+    public com.bank.promotion.domain.command.CommandFactory commandFactory() {
+        return new com.bank.promotion.domain.command.CommandFactory();
+    }
+    
+    @Bean
+    @Primary
+    public com.bank.promotion.domain.command.CommandRegistry commandRegistry() {
+        return Mockito.mock(com.bank.promotion.domain.command.CommandRegistry.class);
+    }
+    
+    @Bean
+    @Primary
+    public com.bank.promotion.command.mock.MockExternalSystemAdapter mockExternalSystemAdapter() {
+        return new com.bank.promotion.command.mock.MockExternalSystemAdapter();
+    }
+    
+    @Bean
+    @Primary
+    public com.bank.promotion.domain.state.PromotionStateManager promotionStateManager() {
+        return new com.bank.promotion.domain.state.PromotionStateManager();
+    }
+    
+    @Bean
+    @Primary
+    public com.bank.promotion.bdd.TestDataManager testDataManager() {
+        return new com.bank.promotion.bdd.TestDataManager();
+    }
+    
+    @Bean
+    @Primary
+    public com.bank.promotion.bdd.mock.MockExternalSystemService mockExternalSystemService() {
+        return new com.bank.promotion.bdd.mock.MockExternalSystemService();
+    }
 }

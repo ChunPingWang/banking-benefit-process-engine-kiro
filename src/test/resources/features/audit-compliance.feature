@@ -1,169 +1,82 @@
-# language: zh-TW
-功能: 稽核和合規性管理
-  作為合規稽核人員
-  我希望系統能完整記錄和管理所有業務處理的稽核軌跡
-  以便滿足銀行業合規要求並支援問題追蹤和分析
+Feature: Audit and Compliance Management
+  As a compliance auditor
+  I want the system to completely record and manage all business processing audit trails
+  So that I can meet banking compliance requirements and support issue tracking and analysis
 
-  背景:
-    假設 稽核和合規系統已啟動
-    而且 稽核資料保留政策已配置為7年
-    而且 合規性檢查規則已載入
-    而且 稽核資料完整性驗證機制已啟用
+  Background:
+    Given the audit and compliance system is started
+    And the audit data retention policy is configured for 7 years
+    And compliance check rules are loaded
+    And audit data integrity verification mechanism is enabled
 
-  場景: 完整請求生命週期稽核記錄
-    假設 客戶 "CUST001" 提交優惠評估請求
-    而且 請求包含完整的客戶資料負載
-    而且 系統分配唯一的請求追蹤ID "REQ-20231201-001"
-    當 系統開始處理優惠評估請求
-    而且 系統記錄請求接收時間和來源IP
-    而且 系統記錄請求資料的完整內容
-    而且 系統執行決策樹 "VIP_PROMOTION" 的每個節點
-    而且 系統記錄每個決策節點的輸入輸出資料
-    而且 系統呼叫外部信用評等和交易歷史系統
-    而且 系統記錄所有外部系統的請求和回應
-    而且 系統完成優惠計算並返回結果
-    而且 系統記錄最終回應內容和處理時間
-    那麼 稽核軌跡應該包含完整的請求生命週期
-    而且 每個處理步驟都應該有時間戳和執行狀態
-    而且 所有外部系統互動都應該被記錄
-    而且 稽核資料應該包含請求唯一標識符
-    而且 稽核記錄應該符合銀行業稽核標準
-    而且 稽核資料應該無法被篡改或刪除
+  Scenario: Complete request lifecycle audit recording
+    Given customer "CUST001" submits a promotion evaluation request
+    And the request contains complete customer data payload
+    And the system assigns unique request tracking ID "REQ-20231201-001"
+    When the system starts processing the promotion evaluation request
+    And the system records request reception time and source IP
+    And the system records complete content of request data
+    And the system executes each node of decision tree "VIP_PROMOTION"
+    And the system records input and output data of each decision node
+    And the system calls external credit rating and transaction history systems
+    And the system records all external system requests and responses
+    And the system completes promotion calculation and returns results
+    And the system records final response content and processing time
+    Then the audit trail should contain complete request lifecycle
+    And each processing step should have timestamp and execution status
+    And all external system interactions should be recorded
+    And audit data should contain request unique identifier
+    And audit records should comply with banking audit standards
+    And audit data should be tamper-proof and undeletable
 
-  場景: 稽核資料查詢和報告生成
-    假設 系統在過去30天內處理了1000筆優惠評估請求
-    而且 稽核資料已完整記錄並建立索引
-    而且 合規人員需要生成月度稽核報告
-    當 合規人員查詢特定時間範圍的稽核資料
-    而且 指定查詢條件為 "2023年11月1日至30日"
-    而且 系統執行稽核資料查詢和統計分析
-    而且 系統生成稽核統計報告
-    而且 系統驗證報告資料的完整性和準確性
-    那麼 報告應該包含1000筆請求的完整統計
-    而且 報告應該包含決策樹執行次數和成功率
-    而且 報告應該包含外部系統呼叫統計和回應時間
-    而且 報告應該包含異常和錯誤事件統計
-    而且 報告應該標示任何可疑或異常的處理模式
-    而且 報告應該符合監管機構要求的格式
-    而且 報告生成過程本身也應該被稽核記錄
+  Scenario: Audit data query and report generation
+    Given the system has processed 1000 promotion evaluation requests in the past 30 days
+    And audit data has been completely recorded and indexed
+    And compliance personnel need to generate monthly audit report
+    When compliance personnel query audit data for specific time range
+    And specify query conditions as "November 1-30, 2023"
+    And the system executes audit data query and statistical analysis
+    And the system generates audit statistical report
+    And the system verifies report data integrity and accuracy
+    Then the report should contain complete statistics of 1000 requests
+    And the report should contain decision tree execution count and success rate
+    And the report should contain external system call statistics and response time
+    And the report should contain exception and error event statistics
+    And the report should mark any suspicious or abnormal processing patterns
+    And the report should comply with regulatory authority required format
+    And the report generation process itself should also be audit recorded
 
-  場景: 合規性檢查和驗證
-    假設 系統需要進行季度合規性檢查
-    而且 檢查範圍涵蓋過去3個月的所有交易
-    而且 合規檢查規則包含資料完整性、處理一致性和時效性要求
-    當 合規系統啟動自動化合規檢查
-    而且 系統檢查所有請求的稽核資料完整性
-    而且 系統驗證決策邏輯的一致性和合理性
-    而且 系統檢查外部系統互動的合規性
-    而且 系統驗證敏感資料的處理和保護措施
-    而且 系統檢查稽核資料的保留和歸檔狀況
-    那麼 合規檢查應該通過所有必要的驗證項目
-    而且 系統應該生成詳細的合規檢查報告
-    而且 報告應該包含所有檢查項目的結果
-    而且 任何不合規項目都應該被明確標示
-    而且 系統應該提供不合規項目的改善建議
-    而且 合規檢查過程應該被完整記錄和稽核
+  Scenario: Compliance check and verification
+    Given the system needs to perform quarterly compliance check
+    And the check scope covers all transactions in the past 3 months
+    And compliance check rules include data integrity, processing consistency and timeliness requirements
+    When the compliance system starts automated compliance check
+    And the system checks audit data integrity of all requests
+    And the system verifies decision logic consistency and reasonableness
+    And the system checks external system interaction compliance
+    And the system verifies sensitive data processing and protection measures
+    And the system checks audit data retention and archiving status
+    Then compliance check should pass all necessary verification items
+    And the system should generate detailed compliance check report
+    And the report should contain results of all check items
+    And any non-compliance items should be clearly marked
+    And the system should provide improvement suggestions for non-compliance items
+    And the compliance check process should be completely recorded and audited
 
-  場景: 資料保留和清理管理
-    假設 系統中存在超過7年的歷史稽核資料
-    而且 資料保留政策要求保留7年後進行歸檔
-    而且 歷史資料總量達到100GB
-    當 系統執行定期資料保留檢查
-    而且 系統識別需要歸檔的過期資料
-    而且 系統驗證歷史資料的完整性和可讀性
-    而且 系統執行資料歸檔到長期儲存系統
-    而且 系統驗證歸檔資料的完整性
-    而且 系統從主要資料庫中清理已歸檔的資料
-    而且 系統更新資料保留記錄和索引
-    那麼 過期資料應該成功歸檔到長期儲存
-    而且 主要資料庫中的資料應該被安全清理
-    而且 歸檔資料應該保持可查詢和可恢復
-    而且 資料歸檔過程應該被完整記錄
-    而且 系統應該維護歸檔資料的索引和目錄
-    而且 資料清理操作應該符合法規要求
-
-  場景: 異常交易模式檢測和報告
-    假設 系統檢測到某個決策樹的執行結果出現異常模式
-    而且 "VIP_PROMOTION" 決策樹的拒絕率在24小時內從5%上升到25%
-    而且 異常檢測系統觸發警報
-    當 合規系統啟動異常模式分析
-    而且 系統分析相關的稽核資料和決策軌跡
-    而且 系統識別可能導致異常的原因
-    而且 系統檢查是否存在配置變更或系統異常
-    而且 系統生成異常模式分析報告
-    而且 系統通知相關的管理人員和合規人員
-    那麼 異常分析報告應該包含詳細的統計資料
-    而且 報告應該識別異常模式的可能原因
-    而且 報告應該包含相關的稽核軌跡和證據
-    而且 報告應該提供調查和改善建議
-    而且 異常檢測和分析過程應該被記錄
-    而且 系統應該持續監控後續的處理模式
-
-  場景: 稽核資料完整性和不可篡改性驗證
-    假設 系統需要驗證稽核資料的完整性和真實性
-    而且 稽核資料使用數位簽章和雜湊值保護
-    而且 需要驗證過去6個月的所有稽核記錄
-    當 合規系統執行資料完整性驗證
-    而且 系統檢查每筆稽核記錄的數位簽章
-    而且 系統驗證稽核資料的雜湊值完整性
-    而且 系統檢查稽核記錄的時間戳順序性
-    而且 系統驗證稽核資料鏈的連續性
-    而且 系統檢查是否存在未授權的修改或刪除
-    那麼 所有稽核記錄的數位簽章應該有效
-    而且 稽核資料的雜湊值應該完全匹配
-    而且 稽核記錄的時間順序應該合理一致
-    而且 稽核資料鏈應該完整無缺
-    而且 不應該發現任何未授權的資料變更
-    而且 完整性驗證過程應該被記錄和報告
-
-  場景: 監管機構稽核支援和資料提供
-    假設 監管機構要求提供特定客戶的完整交易稽核資料
-    而且 稽核範圍涵蓋客戶 "CUST001" 過去12個月的所有交易
-    而且 需要提供符合監管要求格式的稽核報告
-    當 合規人員接收到監管機構的稽核要求
-    而且 系統查詢指定客戶的所有相關稽核記錄
-    而且 系統驗證稽核資料的完整性和準確性
-    而且 系統生成符合監管格式的稽核報告
-    而且 系統對敏感資料進行適當的遮罩處理
-    而且 系統生成稽核資料的數位簽章和證明
-    那麼 稽核報告應該包含客戶的所有相關交易記錄
-    而且 報告格式應該符合監管機構的要求
-    而且 敏感資料應該被適當保護和遮罩
-    而且 稽核資料應該包含完整的處理軌跡
-    而且 報告應該包含資料完整性的證明
-    而且 資料提供過程應該被完整記錄和稽核
-
-  場景: 稽核系統效能和可用性監控
-    假設 稽核系統需要維持高可用性和效能
-    而且 系統每日處理超過10000筆稽核記錄
-    而且 稽核查詢回應時間要求在5秒內
-    當 系統監控稽核服務的效能指標
-    而且 系統檢查稽核資料寫入的延遲時間
-    而且 系統監控稽核查詢的回應時間
-    而且 系統檢查稽核資料庫的儲存空間使用率
-    而且 系統監控稽核服務的可用性狀態
-    而且 系統檢查稽核資料的備份和復原機制
-    那麼 稽核資料寫入延遲應該在100毫秒內
-    而且 稽核查詢回應時間應該在5秒內
-    而且 稽核資料庫使用率應該在80%以下
-    而且 稽核服務可用性應該達到99.9%以上
-    而且 稽核資料備份應該每日自動執行
-    而且 系統應該能在1小時內從備份恢復
-    而且 效能監控資料本身也應該被稽核記錄
-
-  場景: 跨系統稽核資料整合和關聯分析
-    假設 需要整合多個系統的稽核資料進行關聯分析
-    而且 涉及優惠系統、風險系統和客戶管理系統
-    而且 需要分析客戶跨系統的完整行為軌跡
-    當 合規系統啟動跨系統稽核資料整合
-    而且 系統收集各系統的相關稽核記錄
-    而且 系統使用客戶ID和時間戳進行資料關聯
-    而且 系統分析客戶的跨系統行為模式
-    而且 系統識別可能的異常或不一致行為
-    而且 系統生成跨系統稽核分析報告
-    那麼 系統應該成功整合所有相關的稽核資料
-    而且 客戶行為軌跡應該完整且時間一致
-    而且 跨系統資料關聯應該準確無誤
-    而且 異常行為模式應該被正確識別
-    而且 分析報告應該提供清晰的洞察和建議
-    而且 跨系統整合過程應該被完整稽核記錄
+  Scenario: Data retention and cleanup management
+    Given the system contains historical audit data older than 7 years
+    And data retention policy requires archiving after 7 years retention
+    And historical data total volume reaches 100GB
+    When the system executes periodic data retention check
+    And the system identifies expired data that needs archiving
+    And the system verifies historical data integrity and readability
+    And the system executes data archiving to long-term storage system
+    And the system verifies archived data integrity
+    And the system cleans archived data from main database
+    And the system updates data retention records and indexes
+    Then expired data should be successfully archived to long-term storage
+    And data in main database should be safely cleaned
+    And archived data should remain queryable and recoverable
+    And data archiving process should be completely recorded
+    And the system should maintain archived data indexes and catalog
+    And data cleaning operations should comply with regulatory requirements
