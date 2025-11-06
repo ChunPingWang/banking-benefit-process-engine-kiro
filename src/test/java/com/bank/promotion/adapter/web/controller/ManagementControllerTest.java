@@ -56,7 +56,7 @@ class ManagementControllerTest {
     }
     
     @Test
-    @WithMockUser(roles = "MANAGER")
+    @WithMockUser(roles = "ADMIN")
     void shouldUpdatePromotionRuleSuccessfully() throws Exception {
         // Given
         UpdatePromotionRuleRequest request = new UpdatePromotionRuleRequest(
@@ -86,7 +86,7 @@ class ManagementControllerTest {
     }
     
     @Test
-    @WithMockUser(roles = "MANAGER")
+    @WithMockUser(roles = "ADMIN")
     void shouldTogglePromotionRuleStatusSuccessfully() throws Exception {
         // When & Then
         mockMvc.perform(patch("/api/v1/management/promotion-rules/rule-001/status")

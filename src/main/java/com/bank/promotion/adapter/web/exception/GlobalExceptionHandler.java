@@ -67,6 +67,17 @@ public class GlobalExceptionHandler {
     }
     
     /**
+     * 處理存取拒絕異常
+     */
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Object>> handleAccessDeniedException(
+            org.springframework.security.access.AccessDeniedException ex) {
+        
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+            .body(ApiResponse.error("ACCESS_DENIED", "權限不足，無法存取此資源"));
+    }
+    
+    /**
      * 處理運行時異常
      */
     @ExceptionHandler(RuntimeException.class)

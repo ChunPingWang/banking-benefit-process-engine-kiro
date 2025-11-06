@@ -1,11 +1,13 @@
 package com.bank.promotion.application.command.handler;
 
 import com.bank.promotion.application.command.EvaluatePromotionCommand;
+import com.bank.promotion.application.service.audit.AuditService;
 import com.bank.promotion.domain.valueobject.CustomerPayload;
 import com.bank.promotion.domain.valueobject.PromotionResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -15,11 +17,14 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class EvaluatePromotionCommandHandlerTest {
     
+    @Mock
+    private AuditService auditService;
+    
     private EvaluatePromotionCommandHandler handler;
     
     @BeforeEach
     void setUp() {
-        handler = new EvaluatePromotionCommandHandler();
+        handler = new EvaluatePromotionCommandHandler(auditService);
     }
     
     @Test
@@ -34,11 +39,14 @@ class EvaluatePromotionCommandHandlerTest {
             "tree-001", customerPayload, "req-001"
         );
         
-        // When & Then
-        // 由於目前的實作會拋出異常（因為沒有實際的決策樹），我們測試異常處理
-        assertThatThrownBy(() -> handler.handle(command))
-            .isInstanceOf(RuntimeException.class)
-            .hasMessageContaining("Failed to evaluate promotion");
+        // When
+        PromotionResult result = handler.handle(command);
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.isEligible()).isTrue();
+        assertThat(result.getPromotionId()).isEqualTo("promo-vip-001");
+        assertThat(result.getPromotionName()).isEqualTo("VIP專屬優惠");
     }
     
     @Test

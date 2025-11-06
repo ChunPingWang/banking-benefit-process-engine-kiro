@@ -37,6 +37,7 @@ class PromotionControllerTest {
     private ObjectMapper objectMapper;
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldEvaluatePromotionSuccessfully() throws Exception {
         // Given
         EvaluatePromotionRequest request = new EvaluatePromotionRequest(
@@ -69,6 +70,7 @@ class PromotionControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldReturnBadRequestWhenCustomerIdIsEmpty() throws Exception {
         // Given
         EvaluatePromotionRequest request = new EvaluatePromotionRequest(
@@ -86,6 +88,7 @@ class PromotionControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldReturnBadRequestWhenAnnualIncomeIsNegative() throws Exception {
         // Given
         EvaluatePromotionRequest request = new EvaluatePromotionRequest(
@@ -103,6 +106,7 @@ class PromotionControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldReturnBadRequestWhenCreditScoreIsOutOfRange() throws Exception {
         // Given
         EvaluatePromotionRequest request = new EvaluatePromotionRequest(
@@ -120,6 +124,7 @@ class PromotionControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldReturnInternalServerErrorWhenServiceThrowsException() throws Exception {
         // Given
         EvaluatePromotionRequest request = new EvaluatePromotionRequest(
@@ -140,6 +145,7 @@ class PromotionControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldReturnBadRequestWhenRequestBodyIsInvalid() throws Exception {
         // Given
         String invalidJson = "{\"customerId\": \"\"}";

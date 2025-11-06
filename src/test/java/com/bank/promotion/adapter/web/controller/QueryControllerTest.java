@@ -82,6 +82,7 @@ class QueryControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldGetAvailablePromotionsSuccessfully() throws Exception {
         // Given
         AvailablePromotionView promotionView = new AvailablePromotionView(
@@ -105,6 +106,7 @@ class QueryControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "USER")
     void shouldGetAvailablePromotionsWithFilters() throws Exception {
         // Given
         when(promotionApplicationService.getAvailablePromotions(any()))
