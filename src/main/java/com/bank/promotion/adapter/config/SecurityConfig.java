@@ -36,6 +36,8 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/api-docs/**", "/api-docs").permitAll()
                 .requestMatchers("/webjars/**").permitAll()
+                // H2 Console (僅開發環境)
+                .requestMatchers("/h2-console/**").permitAll()
                 // 業務 API 端點
                 .requestMatchers("/api/v1/promotions/evaluate").permitAll()
                 .requestMatchers("/api/v1/promotions/history/**").authenticated()
@@ -46,7 +48,9 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated()
             )
-            .httpBasic(httpBasic -> {});
+            .httpBasic(httpBasic -> {})
+            // 允許 H2 Console 使用 iframe (僅開發環境)
+            .headers(headers -> headers.frameOptions().sameOrigin());
         
         return http.build();
     }

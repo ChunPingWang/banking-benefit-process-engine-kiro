@@ -1166,6 +1166,9 @@ curl http://localhost:8080/actuator/health
 
 # 存取 Swagger UI
 open http://localhost:8080/swagger-ui.html
+
+# 存取 H2 資料庫 Console (開發環境)
+open http://localhost:8080/h2-console
 ```
 
 ### 4. 執行測試
@@ -1179,6 +1182,419 @@ open http://localhost:8080/swagger-ui.html
 
 # 生成測試報告
 ./gradlew test jacocoTestReport
+```
+
+### 5. 查看 H2 資料庫
+
+開發環境使用 H2 記憶體資料庫，提供 Web Console 介面方便查看和操作資料。
+
+#### 啟動應用程式
+```bash
+# 啟動開發環境
+./gradlew bootRun
+
+# 或指定開發 profile
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+#### 存取 H2 Console
+1. **開啟瀏覽器**: http://localhost:8080/h2-console
+2. **連線設定**:
+   - **JDBC URL**: `jdbc:h2:mem:testdb`
+   - **User Name**: `sa`
+   - **Password**: (留空)
+   - **Driver Class**: `org.h2.Driver`
+3. **點擊 Connect** 連線到資料庫
+
+#### H2 Console 功能
+
+**查看資料表結構**:
+```sql
+-- 查看所有資料表
+SHOW TABLES;
+
+-- 查看特定資料表結構
+DESCRIBE DECISION_TREES;
+DESCRIBE PROMOTION_RULES;
+DESCRIBE AUDIT_TRAILS;
+```
+
+**查詢資料**:
+```sql
+-- 查看決策樹配置
+SELECT * FROM DECISION_TREES;
+
+-- 查看優惠規則
+SELECT * FROM PROMOTION_RULES;
+
+-- 查看稽核軌跡
+SELECT * FROM AUDIT_TRAILS ORDER BY CREATED_AT DESC LIMIT 10;
+
+-- 查看請求日誌
+SELECT * FROM REQUEST_LOGS ORDER BY CREATED_AT DESC LIMIT 10;
+
+-- 查看決策步驟
+SELECT * FROM DECISION_STEPS WHERE REQUEST_ID = 'your-request-id';
+```
+
+**測試資料操作**:
+```sql
+-- 插入測試決策樹
+INSERT INTO DECISION_TREES (ID, NAME, STATUS, ROOT_NODE_ID, CREATED_AT, UPDATED_AT) 
+VALUES ('test-tree-001', '測試決策樹', 'ACTIVE', 'root-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 插入測試優惠規則
+INSERT INTO PROMOTION_RULES (ID, NAME, RULE_TYPE, RULE_CONTENT, STATUS, CREATED_AT, UPDATED_AT)
+VALUES ('rule-001', '測試規則', 'SPEL', '#{annualIncome > 1000000}', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 查看資料表統計
+SELECT 
+    TABLE_NAME,
+    ROW_COUNT_ESTIMATE as ROWS
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'PUBLIC'
+ORDER BY TABLE_NAME;
+```
+
+#### 常用查詢範例
+
+**稽核追蹤查詢**:
+```sql
+-- 查看特定客戶的稽核記錄
+SELECT * FROM AUDIT_TRAILS 
+WHERE CUSTOMER_ID = 'CUST001' 
+ORDER BY CREATED_AT DESC;
+
+-- 查看系統事件統計
+SELECT EVENT_TYPE, COUNT(*) as COUNT 
+FROM SYSTEM_EVENTS 
+GROUP BY EVENT_TYPE 
+ORDER BY COUNT DESC;
+
+-- 查看決策樹執行統計
+SELECT 
+    dt.NAME as TREE_NAME,
+    COUNT(ds.ID) as EXECUTION_COUNT,
+    AVG(ds.EXECUTION_TIME_MS) as AVG_TIME_MS
+FROM DECISION_TREES dt
+LEFT JOIN DECISION_STEPS ds ON dt.ID = ds.TREE_ID
+GROUP BY dt.ID, dt.NAME;
+```
+
+**效能分析查詢**:
+```sql
+-- 查看最慢的決策步驟
+SELECT 
+    TREE_ID,
+    NODE_ID,
+    NODE_TYPE,
+    EXECUTION_TIME_MS,
+    CREATED_AT
+FROM DECISION_STEPS 
+WHERE EXECUTION_TIME_MS > 100
+ORDER BY EXECUTION_TIME_MS DESC
+LIMIT 10;
+
+-- 查看 API 回應時間統計
+SELECT 
+    API_ENDPOINT,
+    COUNT(*) as REQUEST_COUNT,
+    AVG(PROCESSING_TIME_MS) as AVG_TIME_MS,
+    MAX(PROCESSING_TIME_MS) as MAX_TIME_MS
+FROM REQUEST_LOGS 
+GROUP BY API_ENDPOINT
+ORDER BY AVG_TIME_MS DESC;
+```
+
+#### H2 資料庫特性
+
+**優點**:
+- 輕量級記憶體資料庫，啟動快速
+- 內建 Web Console，方便開發和除錯
+- 完全相容 SQL 標準
+- 支援 PostgreSQL 相容模式
+
+**注意事項**:
+- 記憶體資料庫，應用程式重啟後資料會消失
+- 適合開發和測試環境使用
+- 生產環境建議使用 PostgreSQL
+
+#### 資料持久化 (可選)
+
+如需在開發時保留資料，可修改配置使用檔案資料庫：
+
+```yaml
+# application-dev.yml
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/testdb;AUTO_SERVER=TRUE
+```
+
+這樣資料會保存在 `./data/testdb.mv.db` 檔案中。
+
+### H2 Console 使用指南
+
+#### 基本操作步驟
+
+1. **啟動應用程式**
+   ```bash
+   ./gradlew bootRun --args='--spring.profiles.active=dev'
+   ```
+
+2. **開啟 H2 Console**
+   - 瀏覽器存取: http://localhost:8080/h2-console
+   - 會看到 H2 Console 登入頁面
+
+3. **連線設定**
+   ```
+   Saved Settings: Generic H2 (Embedded)
+   Setting Name: Generic H2 (Embedded)
+   Driver Class: org.h2.Driver
+   JDBC URL: jdbc:h2:mem:testdb
+   User Name: sa
+   Password: (留空)
+   ```
+
+4. **點擊 "Connect" 連線**
+
+#### 資料表查看和操作
+
+**查看所有資料表**:
+```sql
+-- 顯示所有資料表
+SHOW TABLES;
+
+-- 查看資料表詳細資訊
+SELECT TABLE_NAME, TABLE_TYPE 
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'PUBLIC'
+ORDER BY TABLE_NAME;
+```
+
+**查看資料表結構**:
+```sql
+-- 查看決策樹資料表結構
+DESCRIBE DECISION_TREES;
+
+-- 查看優惠規則資料表結構  
+DESCRIBE PROMOTION_RULES;
+
+-- 查看稽核軌跡資料表結構
+DESCRIBE AUDIT_TRAILS;
+
+-- 查看所有欄位資訊
+SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'DECISION_TREES'
+ORDER BY ORDINAL_POSITION;
+```
+
+**查詢業務資料**:
+```sql
+-- 查看決策樹配置
+SELECT ID, NAME, STATUS, ROOT_NODE_ID, CREATED_AT 
+FROM DECISION_TREES;
+
+-- 查看決策節點配置
+SELECT ID, TREE_ID, NODE_TYPE, PARENT_ID, CONFIGURATION 
+FROM DECISION_NODES 
+ORDER BY TREE_ID, PARENT_ID;
+
+-- 查看優惠規則
+SELECT ID, NAME, RULE_TYPE, STATUS, RULE_CONTENT, PARAMETERS 
+FROM PROMOTION_RULES 
+WHERE STATUS = 'ACTIVE';
+
+-- 查看客戶優惠歷史
+SELECT CUSTOMER_ID, PROMOTION_ID, PROMOTION_RESULT, EXECUTED_AT 
+FROM PROMOTION_HISTORY 
+ORDER BY EXECUTED_AT DESC 
+LIMIT 10;
+```
+
+**稽核資料查詢**:
+```sql
+-- 查看最近的稽核軌跡
+SELECT REQUEST_ID, CUSTOMER_ID, OPERATION_TYPE, STATUS, EXECUTION_TIME_MS, CREATED_AT
+FROM AUDIT_TRAILS 
+ORDER BY CREATED_AT DESC 
+LIMIT 20;
+
+-- 查看特定客戶的稽核記錄
+SELECT * FROM AUDIT_TRAILS 
+WHERE CUSTOMER_ID = 'CUST001' 
+ORDER BY CREATED_AT DESC;
+
+-- 查看 API 請求日誌
+SELECT REQUEST_ID, API_ENDPOINT, HTTP_METHOD, RESPONSE_STATUS, PROCESSING_TIME_MS, CREATED_AT
+FROM REQUEST_LOGS 
+ORDER BY CREATED_AT DESC 
+LIMIT 10;
+
+-- 查看決策步驟詳情
+SELECT ds.REQUEST_ID, ds.TREE_ID, ds.NODE_ID, ds.NODE_TYPE, 
+       ds.STEP_ORDER, ds.EXECUTION_TIME_MS, ds.STATUS, ds.CREATED_AT
+FROM DECISION_STEPS ds
+ORDER BY ds.CREATED_AT DESC, ds.STEP_ORDER ASC
+LIMIT 20;
+
+-- 查看系統事件
+SELECT EVENT_TYPE, EVENT_CATEGORY, SEVERITY_LEVEL, SOURCE_COMPONENT, CREATED_AT
+FROM SYSTEM_EVENTS 
+ORDER BY CREATED_AT DESC 
+LIMIT 15;
+```
+
+**效能分析查詢**:
+```sql
+-- 查看最慢的 API 請求
+SELECT API_ENDPOINT, REQUEST_ID, PROCESSING_TIME_MS, CREATED_AT
+FROM REQUEST_LOGS 
+WHERE PROCESSING_TIME_MS > 1000
+ORDER BY PROCESSING_TIME_MS DESC;
+
+-- 查看決策樹執行效能統計
+SELECT 
+    dt.NAME as TREE_NAME,
+    COUNT(ds.ID) as EXECUTION_COUNT,
+    AVG(ds.EXECUTION_TIME_MS) as AVG_TIME_MS,
+    MAX(ds.EXECUTION_TIME_MS) as MAX_TIME_MS,
+    MIN(ds.EXECUTION_TIME_MS) as MIN_TIME_MS
+FROM DECISION_TREES dt
+LEFT JOIN DECISION_STEPS ds ON dt.ID = ds.TREE_ID
+GROUP BY dt.ID, dt.NAME
+HAVING COUNT(ds.ID) > 0
+ORDER BY AVG_TIME_MS DESC;
+
+-- 查看節點類型執行統計
+SELECT 
+    NODE_TYPE,
+    COUNT(*) as EXECUTION_COUNT,
+    AVG(EXECUTION_TIME_MS) as AVG_TIME_MS
+FROM DECISION_STEPS 
+GROUP BY NODE_TYPE
+ORDER BY AVG_TIME_MS DESC;
+```
+
+**資料維護操作**:
+```sql
+-- 清理舊的稽核資料 (測試用)
+DELETE FROM AUDIT_TRAILS 
+WHERE CREATED_AT < DATEADD('DAY', -7, CURRENT_TIMESTAMP);
+
+-- 清理舊的請求日誌
+DELETE FROM REQUEST_LOGS 
+WHERE CREATED_AT < DATEADD('DAY', -30, CURRENT_TIMESTAMP);
+
+-- 查看資料表大小統計
+SELECT 
+    TABLE_NAME,
+    ROW_COUNT_ESTIMATE as ESTIMATED_ROWS
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'PUBLIC' 
+    AND TABLE_TYPE = 'TABLE'
+ORDER BY ROW_COUNT_ESTIMATE DESC;
+```
+
+#### 測試資料插入範例
+
+**插入測試決策樹**:
+```sql
+-- 插入決策樹
+INSERT INTO DECISION_TREES (ID, NAME, STATUS, ROOT_NODE_ID, CREATED_AT, UPDATED_AT) 
+VALUES ('test-tree-001', 'VIP客戶決策樹', 'ACTIVE', 'root-001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 插入根節點
+INSERT INTO DECISION_NODES (ID, TREE_ID, NODE_TYPE, PARENT_ID, CONFIGURATION, CREATED_AT)
+VALUES ('root-001', 'test-tree-001', 'CONDITION', NULL, 
+        '{"commandType":"SPEL_CONDITION","expression":"#{accountType == ''VIP''}","description":"VIP客戶判斷"}', 
+        CURRENT_TIMESTAMP);
+
+-- 插入子節點
+INSERT INTO DECISION_NODES (ID, TREE_ID, NODE_TYPE, PARENT_ID, CONFIGURATION, CREATED_AT)
+VALUES ('calc-001', 'test-tree-001', 'CALCULATION', 'root-001',
+        '{"commandType":"CALCULATION","strategyType":"TIERED_DISCOUNT","parameters":{"discountAmount":5000,"promotionName":"VIP專屬優惠"}}',
+        CURRENT_TIMESTAMP);
+```
+
+**插入測試優惠規則**:
+```sql
+INSERT INTO PROMOTION_RULES (ID, NAME, RULE_TYPE, RULE_CONTENT, PARAMETERS, STATUS, CREATED_AT, UPDATED_AT)
+VALUES 
+('rule-001', 'VIP高收入客戶規則', 'SPEL', '#{annualIncome >= 2000000 and accountType == "VIP"}', 
+ '{"discountPercentage": 10.0, "maxDiscount": 10000}', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('rule-002', '新戶開戶規則', 'SPEL', '#{transactionHistory.size() <= 3 and creditScore >= 650}',
+ '{"discountAmount": 1000, "validDays": 30}', 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+```
+
+**插入測試稽核資料**:
+```sql
+INSERT INTO REQUEST_LOGS (ID, REQUEST_ID, API_ENDPOINT, HTTP_METHOD, REQUEST_PAYLOAD, 
+                         RESPONSE_PAYLOAD, RESPONSE_STATUS, PROCESSING_TIME_MS, CREATED_AT, COMPLETED_AT)
+VALUES ('log-001', 'req-001', '/api/v1/promotions/evaluate', 'POST',
+        '{"customerId":"CUST001","accountType":"VIP","annualIncome":2000000}',
+        '{"success":true,"data":{"promotionId":"promo-vip-001"}}',
+        200, 150, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO AUDIT_TRAILS (ID, REQUEST_ID, CUSTOMER_ID, OPERATION_TYPE, OPERATION_DETAILS,
+                         EXECUTION_TIME_MS, STATUS, CREATED_AT)
+VALUES ('audit-001', 'req-001', 'CUST001', 'PROMOTION_EVALUATION',
+        '{"treeId":"test-tree-001","result":"VIP專屬優惠","discountAmount":5000}',
+        150, 'SUCCESS', CURRENT_TIMESTAMP);
+```
+
+#### H2 Console 進階功能
+
+**匯出資料**:
+```sql
+-- 匯出資料表為 CSV
+SELECT * FROM DECISION_TREES;
+-- 然後點擊結果區域的 "CSV" 按鈕下載
+
+-- 匯出為 SQL 腳本
+SCRIPT TO 'backup.sql';
+```
+
+**執行計劃分析**:
+```sql
+-- 查看查詢執行計劃
+EXPLAIN SELECT * FROM AUDIT_TRAILS WHERE CUSTOMER_ID = 'CUST001';
+
+-- 分析複雜查詢效能
+EXPLAIN ANALYZE 
+SELECT dt.NAME, COUNT(ds.ID) as STEPS
+FROM DECISION_TREES dt
+LEFT JOIN DECISION_STEPS ds ON dt.ID = ds.TREE_ID
+GROUP BY dt.ID, dt.NAME;
+```
+
+#### 故障排除
+
+**常見問題**:
+
+1. **無法連線到 H2 Console**
+   - 確認應用程式已啟動且使用 `dev` profile
+   - 檢查 URL: http://localhost:8080/h2-console
+   - 確認 JDBC URL: `jdbc:h2:mem:testdb`
+
+2. **資料表不存在**
+   - 確認 Hibernate 已經執行 DDL
+   - 檢查應用程式啟動日誌中的 CREATE TABLE 語句
+
+3. **權限問題**
+   - 確認安全配置已允許 `/h2-console/**` 端點
+   - 檢查 X-Frame-Options 設定為 SAMEORIGIN
+
+**除錯查詢**:
+```sql
+-- 檢查資料庫連線資訊
+SELECT * FROM INFORMATION_SCHEMA.SESSIONS;
+
+-- 檢查當前資料庫設定
+SELECT * FROM INFORMATION_SCHEMA.SETTINGS;
+
+-- 檢查記憶體使用情況
+SELECT * FROM INFORMATION_SCHEMA.MEMORY_USAGE;
 ```
 
 ## API 使用範例
@@ -1403,8 +1819,10 @@ src/
 
 #### 開發環境 (dev)
 - 資料庫: H2 記憶體資料庫
+- H2 Console: http://localhost:8080/h2-console
 - 日誌等級: DEBUG
 - Swagger: 啟用
+- SQL 日誌: 啟用
 
 #### 測試環境 (sit/uat)
 - 資料庫: PostgreSQL
