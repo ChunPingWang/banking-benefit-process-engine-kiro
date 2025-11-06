@@ -67,4 +67,59 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    
+    // 排除 Cucumber 測試運行器
+    exclude '**/CucumberTestRunner.class'
+    
+    // 配置測試報告
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+    
+    // 確保測試完成後生成報告
+    finalizedBy jacocoTestReport
+}
+
+// Jacoco 測試覆蓋率報告
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+    
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                '**/config/**',
+                '**/dto/**',
+                '**/*Application*',
+                '**/CucumberTestRunner*'
+            ])
+        }))
+    }
+}
+
+// Cucumber 測試任務
+task cucumberTest(type: Test) {
+    useJUnitPlatform()
+    include '**/CucumberTestRunner.class'
+    
+    systemProperty 'cucumber.junit-platform.naming-strategy', 'long'
+    
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+    
+    doLast {
+        println "Cucumber 測試報告已生成："
+        println "- HTML 報告: ${project.buildDir}/reports/cucumber/index.html"
+        println "- JSON 報告: ${project.buildDir}/reports/cucumber/cucumber.json"
+        println "- JUnit XML: ${project.buildDir}/reports/cucumber/junit.xml"
+    }
 }

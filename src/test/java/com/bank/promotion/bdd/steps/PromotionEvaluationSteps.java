@@ -33,24 +33,7 @@ public class PromotionEvaluationSteps extends BaseStepDefinitions {
     private String currentTreeId;
     private boolean externalSystemError = false;
     
-    @Given("the system has initialized test data")
-    public void theSystemHasInitializedTestData() {
-        initializeTest();
-        recordSystemEvent("SYSTEM_INIT", "SETUP", "Test data initialization completed", "INFO", "TestDataManager");
-    }
-    
-    @And("audit tracking mechanism is enabled")
-    public void auditTrackingMechanismIsEnabled() {
-        assertNotNull(auditTracker, "Audit tracker should be initialized");
-        recordSystemEvent("AUDIT_INIT", "SETUP", "Audit tracking mechanism enabled", "INFO", "AuditTracker");
-    }
-    
-    @And("external system mock service is ready")
-    public void externalSystemMockServiceIsReady() {
-        assertNotNull(mockExternalSystemService, "External system mock service should be initialized");
-        mockExternalSystemService.resetMockData();
-        recordSystemEvent("MOCK_INIT", "SETUP", "External system mock service ready", "INFO", "MockExternalSystemService");
-    }
+    // 共用步驟已移至 CommonSteps 類別
     
     @Given("customer {string} has annual income of {int} yuan")
     public void customerHasAnnualIncomeOfYuan(String customerId, int annualIncome) {

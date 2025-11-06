@@ -44,6 +44,56 @@ public class TestDataManager {
         mockExternalSystemService.resetMockData();
     }
     
+    private TestCustomerData currentCustomer;
+    
+    /**
+     * 設定當前客戶
+     */
+    public void setCurrentCustomer(String customerId, int annualIncome) {
+        currentCustomer = new TestCustomerData(
+            customerId,
+            "一般", // 預設帳戶類型
+            BigDecimal.valueOf(annualIncome),
+            30, // 預設年齡
+            "台北市", // 預設地區
+            "一般行業" // 預設行業
+        );
+    }
+    
+    /**
+     * 設定帳戶類型
+     */
+    public void setAccountType(String accountType) {
+        if (currentCustomer != null) {
+            // 重新建立客戶資料以更新帳戶類型
+            currentCustomer = new TestCustomerData(
+                currentCustomer.getCustomerId(),
+                accountType,
+                currentCustomer.getAnnualIncome(),
+                currentCustomer.getAge(),
+                currentCustomer.getLocation(),
+                currentCustomer.getIndustry()
+            );
+        }
+    }
+    
+    /**
+     * 提交優惠請求
+     */
+    public void submitPromotionRequest() {
+        // 模擬提交優惠請求
+        if (currentCustomer != null) {
+            String requestId = auditTracker.startRequestTracking(
+                "/api/v1/promotions/evaluate", 
+                "POST", 
+                Map.of("customerId", currentCustomer.getCustomerId())
+            );
+            // 記錄系統事件
+            auditTracker.recordSystemEvent(requestId, "PROMOTION_REQUEST", "REQUEST", 
+                Map.of("customerId", currentCustomer.getCustomerId()), "INFO", "TestDataManager");
+        }
+    }
+    
     /**
      * 獲取測試客戶資料
      */

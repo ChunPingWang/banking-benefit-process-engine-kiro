@@ -10,8 +10,10 @@ import org.springframework.test.context.ActiveProfiles;
  * 提供測試環境的 Spring 上下文
  */
 @CucumberContextConfiguration
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    classes = com.bank.promotion.PromotionSystemApplication.class,
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @ActiveProfiles("test")
-@Import({BddTestConfiguration.class, TestSecurityConfiguration.class})
 public class CucumberSpringConfiguration {
 }
