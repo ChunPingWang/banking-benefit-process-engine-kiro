@@ -6,6 +6,13 @@ import com.bank.promotion.application.command.EvaluatePromotionCommand;
 import com.bank.promotion.application.service.PromotionApplicationService;
 import com.bank.promotion.domain.valueobject.CustomerPayload;
 import com.bank.promotion.domain.valueobject.PromotionResult;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +29,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/promotions")
 @Validated
+@Tag(name = "優惠評估", description = "客戶優惠推薦相關 API")
 public class PromotionController {
     
     private final PromotionApplicationService promotionApplicationService;
@@ -35,8 +43,95 @@ public class PromotionController {
      * 評估客戶優惠資格
      * POST /api/v1/promotions/evaluate
      */
+    @Operation(
+        summary = "評估客戶優惠",
+        description = "根據客戶資料和決策樹配置，評估客戶適合的優惠方案",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "客戶評估請求資料",
+            required = true,
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = EvaluatePromotionRequest.class),
+                examples = @ExampleObject(
+                    name = "高價值客戶範例",
+                    value = """
+                        {
+                          "customerId": "CUST001",
+                          "accountType": "VIP",
+                          "annualIncome": 2000000,
+                          "creditScore": 750,
+                          "region": "台北市",
+                          "transactionCount": 50,
+                          "accountBalance": 500000,
+                          "transactionHistory": [
+                            {"amount": 10000, "type": "DEPOSIT", "date": "2024-01-15"},
+                            {"amount": 5000, "type": "TRANSFER", "date": "2024-01-20"}
+                          ]
+                        }
+                        """
+                )
+            )
+        )
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "評估成功",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "成功回應範例",
+                    value = """
+                        {
+                          "success": true,
+                          "data": {
+                            "promotionId": "PROMO_VIP_001",
+                            "promotionName": "VIP專屬理財優惠",
+                            "discountAmount": 1000,
+                            "description": "享有專屬理財顧問服務及手續費減免",
+                            "validUntil": "2024-12-31T23:59:59"
+                          },
+                          "message": "優惠評估完成",
+                          "timestamp": "2024-01-15T10:30:00"
+                        }
+                        """
+                )
+            )
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "請求資料格式錯誤",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "錯誤回應範例",
+                    value = """
+                        {
+                          "success": false,
+                          "error": {
+                            "code": "INVALID_REQUEST",
+                            "message": "請求資料驗證失敗: 客戶ID不能為空"
+                          },
+                          "timestamp": "2024-01-15T10:30:00"
+                        }
+                        """
+                )
+            )
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "500",
+            description = "系統內部錯誤",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class)
+            )
+        )
+    })
     @PostMapping("/evaluate")
     public ResponseEntity<ApiResponse<PromotionResult>> evaluatePromotion(
+            @Parameter(description = "客戶優惠評估請求", required = true)
             @Valid @RequestBody EvaluatePromotionRequest request) {
         
         try {

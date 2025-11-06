@@ -3,6 +3,14 @@ package com.bank.promotion.adapter.web.controller;
 import com.bank.promotion.adapter.web.dto.ApiResponse;
 import com.bank.promotion.application.service.audit.AuditService;
 import com.bank.promotion.application.service.audit.AuditTrail;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +30,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/audit")
 @Validated
+@Tag(name = "稽核追蹤", description = "稽核軌跡查詢和合規性報告相關 API")
+@SecurityRequirement(name = "Bearer Authentication")
 public class AuditController {
     
     private final AuditService auditService;
@@ -35,12 +45,57 @@ public class AuditController {
      * 查詢稽核軌跡
      * GET /api/v1/audit/trails
      */
+    @Operation(
+        summary = "查詢稽核軌跡",
+        description = "根據請求ID或客戶ID查詢完整的稽核軌跡記錄，支援時間範圍篩選"
+    )
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "200",
+            description = "查詢成功",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ApiResponse.class),
+                examples = @ExampleObject(
+                    name = "稽核軌跡查詢成功",
+                    value = """
+                        {
+                          "success": true,
+                          "data": [
+                            {
+                              "requestId": "req-123",
+                              "operationType": "PROMOTION_EVALUATION",
+                              "operationDetails": {"customerId": "CUST001", "result": "VIP優惠"},
+                              "executionTimeMs": 150,
+                              "status": "SUCCESS",
+                              "timestamp": "2024-01-15T10:30:00"
+                            }
+                          ],
+                          "message": "稽核軌跡查詢成功"
+                        }
+                        """
+                )
+            )
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "400",
+            description = "請求參數錯誤"
+        ),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(
+            responseCode = "403",
+            description = "權限不足，需要 ADMIN 或 AUDITOR 角色"
+        )
+    })
     @GetMapping("/trails")
     @PreAuthorize("hasRole('ADMIN') or hasRole('AUDITOR')")
     public ResponseEntity<ApiResponse<List<AuditTrail>>> getAuditTrails(
+            @Parameter(description = "請求ID，用於查詢特定請求的稽核軌跡") 
             @RequestParam(required = false) String requestId,
+            @Parameter(description = "客戶ID，用於查詢特定客戶的稽核軌跡") 
             @RequestParam(required = false) String customerId,
+            @Parameter(description = "查詢開始時間 (ISO 8601 格式)", example = "2024-01-01T00:00:00") 
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @Parameter(description = "查詢結束時間 (ISO 8601 格式)", example = "2024-01-31T23:59:59") 
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         
         try {

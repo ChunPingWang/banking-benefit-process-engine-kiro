@@ -36,6 +36,8 @@
 - **System_Event**: 系統事件，記錄系統內部重要操作和狀態變更
 - **Audit_Service**: 稽核服務，負責收集、儲存和查詢稽核資料的服務組件
 - **Compliance_Report**: 合規報告，基於稽核資料生成的合規性檢查報告
+- **Swagger_Documentation**: Swagger API 文檔，提供互動式 API 文檔和測試介面
+- **OpenAPI_Specification**: OpenAPI 規格，標準化的 API 描述格式
 
 ## 需求
 
@@ -185,6 +187,23 @@
 10. THE Promotion_System SHALL 保留稽核資料至少 7 年，並支援資料歸檔和清理功能
 
 ### 需求 12
+
+**使用者故事:** 作為 API 使用者和開發人員，我希望系統提供完整的 Swagger API 文檔，以便快速理解和測試 API 功能
+
+#### 驗收標準
+
+1. THE Promotion_System SHALL 整合 Swagger_Documentation 提供互動式 API 文檔介面
+2. THE Promotion_System SHALL 在 /swagger-ui.html 路徑提供 Swagger UI 存取點
+3. THE Promotion_System SHALL 為所有 REST API 端點提供完整的 OpenAPI_Specification
+4. THE Promotion_System SHALL 在 API 文檔中包含請求和回應的資料模型定義
+5. THE Promotion_System SHALL 在 API 文檔中包含錯誤回應的詳細說明
+6. THE Promotion_System SHALL 支援透過 Swagger UI 直接測試 API 端點
+7. THE Promotion_System SHALL 在 API 文檔中包含安全性認證說明
+8. THE Promotion_System SHALL 為每個 API 端點提供範例請求和回應資料
+9. THE Promotion_System SHALL 在不同環境中正確顯示對應的 API 基礎 URL
+10. THE Promotion_System SHALL 確保 API 文檔與實際 API 實作保持同步
+
+### 需求 13
 
 **使用者故事:** 作為開發團隊成員，我希望系統採用規範的版本控制和測試流程，以便確保程式碼品質和專案可追蹤性
 

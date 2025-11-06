@@ -46,6 +46,9 @@ dependencies {
     // JSON processing
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     
+    // API Documentation
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    
     // Development tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

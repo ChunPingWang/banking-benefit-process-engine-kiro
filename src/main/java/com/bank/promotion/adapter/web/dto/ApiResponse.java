@@ -1,26 +1,33 @@
 package com.bank.promotion.adapter.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * 標準化API回應格式
  */
+@Schema(description = "標準化 API 回應格式")
 public class ApiResponse<T> {
     
+    @Schema(description = "請求是否成功", example = "true")
     @JsonProperty("success")
     private boolean success;
     
+    @Schema(description = "回應資料")
     @JsonProperty("data")
     private T data;
     
+    @Schema(description = "回應訊息", example = "操作成功")
     @JsonProperty("message")
     private String message;
     
+    @Schema(description = "錯誤代碼 (僅在失敗時出現)", example = "INVALID_REQUEST")
     @JsonProperty("errorCode")
     private String errorCode;
     
+    @Schema(description = "回應時間戳", example = "2024-01-15T10:30:00")
     @JsonProperty("timestamp")
     private LocalDateTime timestamp;
     

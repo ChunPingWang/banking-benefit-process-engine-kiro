@@ -27,3 +27,20 @@ logging:
 
 drools:
   enabled: false
+
+# SpringDoc OpenAPI 配置
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+    filter: true
+    displayRequestDuration: true
+  packages-to-scan: com.bank.promotion.adapter.web.controller
+  paths-to-match: /api/**
+  show-actuator: false

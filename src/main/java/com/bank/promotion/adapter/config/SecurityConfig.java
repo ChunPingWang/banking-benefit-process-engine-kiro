@@ -32,11 +32,17 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
+                // Swagger 和 API 文檔端點
+                .requestMatchers("/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/api-docs/**", "/api-docs").permitAll()
+                .requestMatchers("/webjars/**").permitAll()
+                // 業務 API 端點
                 .requestMatchers("/api/v1/promotions/evaluate").permitAll()
                 .requestMatchers("/api/v1/promotions/history/**").authenticated()
                 .requestMatchers("/api/v1/promotions/available/**").authenticated()
                 .requestMatchers("/api/v1/management/**").hasAnyRole("ADMIN", "MANAGER")
                 .requestMatchers("/api/v1/audit/**").hasAnyRole("ADMIN", "AUDITOR")
+                // 監控端點
                 .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated()
             )

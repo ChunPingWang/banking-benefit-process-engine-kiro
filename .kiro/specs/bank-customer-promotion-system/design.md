@@ -649,6 +649,53 @@ public class TestDataManager {
 
 ## 安全性設計
 
+### API 文檔和開發者體驗
+
+#### Swagger/OpenAPI 整合設計
+
+**Swagger 配置架構**
+```yaml
+# Swagger 配置
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+  packages-to-scan: com.bank.promotion.adapter.web.controller
+  paths-to-match: /api/**
+```
+
+**API 文檔結構設計**
+- **API 分組**: 按功能模組分組 (優惠評估、管理、查詢、稽核)
+- **資料模型**: 完整的請求/回應 DTO 定義
+- **錯誤處理**: 標準化錯誤回應格式
+- **安全性**: JWT 認證配置說明
+- **範例資料**: 每個端點的範例請求和回應
+
+**OpenAPI 註解策略**
+```java
+@RestController
+@RequestMapping("/api/v1/promotions")
+@Tag(name = "優惠評估", description = "客戶優惠推薦相關 API")
+public class PromotionController {
+    
+    @Operation(summary = "評估客戶優惠", description = "根據客戶資料評估適合的優惠方案")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "評估成功"),
+        @ApiResponse(responseCode = "400", description = "請求資料格式錯誤"),
+        @ApiResponse(responseCode = "500", description = "系統內部錯誤")
+    })
+    @PostMapping("/evaluate")
+    public ResponseEntity<PromotionResult> evaluatePromotion(
+        @Valid @RequestBody EvaluatePromotionRequest request
+    ) { ... }
+}
+```
+
 ### API 安全
 - JWT Token 驗證
 - 角色基礎存取控制
