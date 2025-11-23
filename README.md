@@ -694,7 +694,188 @@ graph TD
 
 ## 資料庫設計
 
-### ER-Diagram
+### 資料表結構清單 (Database Schema)
+
+系統共包含 8 個核心資料表，分為業務資料表和稽核資料表兩大類別。
+
+#### 業務資料表 (Business Tables)
+
+##### 1. 決策樹資料表 (decision_trees)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 決策樹ID | id | VARCHAR | 36 | PRIMARY KEY | 決策樹唯一識別碼 (UUID) |
+| 決策樹名稱 | name | VARCHAR | 100 | NOT NULL | 決策樹顯示名稱 |
+| 狀態 | status | VARCHAR | 20 | NOT NULL | 決策樹狀態 (ACTIVE/INACTIVE/DRAFT) |
+| 根節點ID | root_node_id | VARCHAR | 36 | FOREIGN KEY | 指向根節點的外鍵 |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄建立時間 |
+| 更新時間 | updated_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄最後更新時間 |
+
+**索引**:
+- `idx_tree_status` ON (status)
+
+**用途**: 儲存決策樹的基本配置資訊，每個決策樹代表一套完整的優惠評估邏輯。
+
+---
+
+##### 2. 決策節點資料表 (decision_nodes)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 節點ID | id | VARCHAR | 36 | PRIMARY KEY | 決策節點唯一識別碼 (UUID) |
+| 決策樹ID | tree_id | VARCHAR | 36 | NOT NULL, FOREIGN KEY | 所屬決策樹ID |
+| 節點類型 | node_type | VARCHAR | 20 | NOT NULL | 節點類型 (CONDITION/CALCULATION) |
+| 父節點ID | parent_id | VARCHAR | 36 | FOREIGN KEY | 父節點ID，根節點為 NULL |
+| 節點配置 | configuration | JSON/TEXT | - | NOT NULL | 節點執行配置 (JSON格式) |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄建立時間 |
+
+**外鍵關係**:
+- `tree_id` → `decision_trees(id)`
+- `parent_id` → `decision_nodes(id)` (自參照)
+
+**用途**: 儲存決策樹中每個節點的詳細配置，包括條件判斷和計算邏輯。
+
+---
+
+##### 3. 優惠規則資料表 (promotion_rules)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 規則ID | id | VARCHAR | 36 | PRIMARY KEY | 優惠規則唯一識別碼 (UUID) |
+| 規則名稱 | name | VARCHAR | 100 | NOT NULL | 規則顯示名稱 |
+| 規則類型 | rule_type | VARCHAR | 20 | NOT NULL | 規則類型 (SPEL/DROOLS/HARDCODED) |
+| 規則內容 | rule_content | TEXT | - | NOT NULL | 規則表達式或邏輯內容 |
+| 參數設定 | parameters | JSON/TEXT | - | - | 規則執行參數 (JSON格式) |
+| 狀態 | status | VARCHAR | 20 | NOT NULL | 規則狀態 (ACTIVE/INACTIVE) |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄建立時間 |
+| 更新時間 | updated_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄最後更新時間 |
+
+**索引**:
+- `idx_rule_status` ON (status)
+
+**用途**: 儲存可重複使用的優惠規則，支援 SpEL 表達式和 Drools 規則引擎。
+
+---
+
+##### 4. 優惠歷史資料表 (promotion_history)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 歷史記錄ID | id | VARCHAR | 36 | PRIMARY KEY | 優惠歷史唯一識別碼 (UUID) |
+| 客戶ID | customer_id | VARCHAR | 50 | NOT NULL | 客戶識別碼 |
+| 優惠ID | promotion_id | VARCHAR | 36 | NOT NULL | 優惠方案識別碼 |
+| 優惠結果 | promotion_result | JSON/TEXT | - | NOT NULL | 優惠評估結果 (JSON格式) |
+| 執行時間 | executed_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 優惠執行時間 |
+
+**索引**:
+- `idx_customer_date` ON (customer_id, executed_at)
+
+**用途**: 記錄客戶的優惠申請和執行歷史，用於分析和報表。
+
+---
+
+#### 稽核資料表 (Audit Tables)
+
+##### 5. 請求日誌資料表 (request_logs)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 日誌ID | id | VARCHAR | 36 | PRIMARY KEY | 請求日誌唯一識別碼 (UUID) |
+| 請求ID | request_id | VARCHAR | 36 | UNIQUE, NOT NULL | 請求唯一識別碼 |
+| API端點 | api_endpoint | VARCHAR | 200 | NOT NULL | 被呼叫的API端點路徑 |
+| HTTP方法 | http_method | VARCHAR | 10 | NOT NULL | HTTP請求方法 (GET/POST/PUT/DELETE) |
+| 請求內容 | request_payload | JSON/TEXT | - | NOT NULL | 請求參數和內容 (JSON格式) |
+| 回應內容 | response_payload | JSON/TEXT | - | - | 回應資料內容 (JSON格式) |
+| 回應狀態碼 | response_status | INTEGER | - | - | HTTP回應狀態碼 |
+| 客戶端IP | client_ip | VARCHAR | 45 | - | 客戶端IP位址 (支援IPv6) |
+| 使用者代理 | user_agent | TEXT | - | - | 客戶端瀏覽器資訊 |
+| 處理時間 | processing_time_ms | INTEGER | - | - | 請求處理時間 (毫秒) |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 請求開始時間 |
+| 完成時間 | completed_at | TIMESTAMP | - | - | 請求完成時間 |
+
+**索引**:
+- `idx_request_id` ON (request_id)
+- `idx_endpoint_date` ON (api_endpoint, created_at)
+
+**用途**: 記錄所有API請求的完整資訊，用於效能監控和問題追蹤。
+
+---
+
+##### 6. 稽核軌跡資料表 (audit_trails)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 稽核ID | id | VARCHAR | 36 | PRIMARY KEY | 稽核記錄唯一識別碼 (UUID) |
+| 請求ID | request_id | VARCHAR | 36 | NOT NULL | 關聯的請求ID |
+| 客戶ID | customer_id | VARCHAR | 50 | NOT NULL | 相關客戶ID |
+| 操作類型 | operation_type | VARCHAR | 50 | NOT NULL | 操作類型 (如 PROMOTION_EVALUATION) |
+| 操作詳情 | operation_details | JSON/TEXT | - | NOT NULL | 操作詳細資訊 (JSON格式) |
+| 執行時間 | execution_time_ms | INTEGER | - | - | 操作執行時間 (毫秒) |
+| 狀態 | status | VARCHAR | 20 | NOT NULL | 執行狀態 (SUCCESS/FAILED/PENDING) |
+| 錯誤訊息 | error_message | TEXT | - | - | 錯誤詳細訊息 |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄建立時間 |
+
+**索引**:
+- `idx_audit_request_id` ON (request_id)
+- `idx_audit_customer_operation` ON (customer_id, operation_type)
+- `idx_audit_created_at` ON (created_at)
+
+**用途**: 記錄業務操作的詳細軌跡，確保所有操作可追蹤和稽核。
+
+---
+
+##### 7. 決策步驟資料表 (decision_steps)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 步驟ID | id | VARCHAR | 36 | PRIMARY KEY | 決策步驟唯一識別碼 (UUID) |
+| 請求ID | request_id | VARCHAR | 36 | NOT NULL, FOREIGN KEY | 關聯的請求ID |
+| 決策樹ID | tree_id | VARCHAR | 36 | NOT NULL, FOREIGN KEY | 執行的決策樹ID |
+| 節點ID | node_id | VARCHAR | 36 | NOT NULL, FOREIGN KEY | 執行的節點ID |
+| 步驟順序 | step_order | INTEGER | - | NOT NULL | 執行順序編號 |
+| 節點類型 | node_type | VARCHAR | 20 | NOT NULL | 節點類型 (CONDITION/CALCULATION) |
+| 輸入資料 | input_data | JSON/TEXT | - | NOT NULL | 節點輸入資料 (JSON格式) |
+| 輸出資料 | output_data | JSON/TEXT | - | - | 節點輸出結果 (JSON格式) |
+| 執行時間 | execution_time_ms | INTEGER | - | - | 節點執行時間 (毫秒) |
+| 狀態 | status | VARCHAR | 20 | NOT NULL | 執行狀態 (SUCCESS/FAILED) |
+| 錯誤詳情 | error_details | TEXT | - | - | 錯誤詳細資訊 |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 記錄建立時間 |
+
+**外鍵關係**:
+- `request_id` → `request_logs(request_id)`
+- `tree_id` → `decision_trees(id)`
+
+**索引**:
+- `idx_decision_request_step` ON (request_id, step_order)
+- `idx_decision_tree_node` ON (tree_id, node_id)
+
+**用途**: 詳細記錄決策樹執行過程中每個節點的執行情況，用於除錯和效能分析。
+
+---
+
+##### 8. 系統事件資料表 (system_events)
+
+| 中文名稱 | 英文欄位名 | 資料型態 | 長度 | 約束 | 說明 |
+|---------|-----------|---------|------|------|------|
+| 事件ID | id | VARCHAR | 36 | PRIMARY KEY | 系統事件唯一識別碼 (UUID) |
+| 事件類型 | event_type | VARCHAR | 50 | NOT NULL | 事件類型 (如 SYSTEM_START, ERROR) |
+| 事件分類 | event_category | VARCHAR | 30 | NOT NULL | 事件分類 (SYSTEM/BUSINESS/SECURITY) |
+| 事件詳情 | event_details | JSON/TEXT | - | NOT NULL | 事件詳細資訊 (JSON格式) |
+| 嚴重程度 | severity_level | VARCHAR | 20 | NOT NULL | 嚴重程度 (INFO/WARN/ERROR/CRITICAL) |
+| 來源元件 | source_component | VARCHAR | 100 | NOT NULL | 產生事件的系統元件 |
+| 關聯ID | correlation_id | VARCHAR | 36 | - | 關聯的請求或操作ID |
+| 建立時間 | created_at | TIMESTAMP | - | DEFAULT CURRENT_TIMESTAMP | 事件發生時間 |
+
+**索引**:
+- `idx_event_type_date` ON (event_type, created_at)
+- `idx_event_correlation_id` ON (correlation_id)
+- `idx_event_severity_date` ON (severity_level, created_at)
+
+**用途**: 記錄系統運行過程中的各種事件，用於系統監控和問題診斷。
+
+---
+
+### 資料表關係圖 (ER-Diagram)
 
 ```mermaid
 erDiagram
@@ -795,18 +976,135 @@ erDiagram
     DECISION_TREES ||--o{ DECISION_STEPS : executes
 ```
 
-### 資料表說明
+### 資料型態說明
 
-| 資料表 | 用途 | 關鍵欄位 |
-|--------|------|----------|
-| **decision_trees** | 決策樹配置 | id, name, status, root_node_id |
-| **decision_nodes** | 決策節點定義 | id, tree_id, node_type, configuration |
-| **promotion_rules** | 優惠規則設定 | id, rule_type, rule_content, parameters |
-| **promotion_history** | 客戶優惠歷史 | customer_id, promotion_result, executed_at |
-| **audit_trails** | 稽核軌跡記錄 | request_id, operation_type, operation_details |
-| **request_logs** | API 請求日誌 | request_id, api_endpoint, request_payload |
-| **decision_steps** | 決策步驟追蹤 | request_id, tree_id, node_id, step_order |
-| **system_events** | 系統事件記錄 | event_type, severity_level, event_details |
+#### PostgreSQL vs H2 資料型態對應
+
+| 邏輯型態 | PostgreSQL | H2 | 說明 |
+|---------|-----------|-----|------|
+| **UUID** | VARCHAR(36) | VARCHAR(36) | 36字元的UUID字串 |
+| **短文字** | VARCHAR(n) | VARCHAR(n) | 可變長度字串，最大n字元 |
+| **長文字** | TEXT | TEXT | 不限長度的文字內容 |
+| **JSON資料** | JSON | TEXT | PostgreSQL原生JSON，H2使用TEXT儲存 |
+| **整數** | INTEGER | INTEGER | 32位元整數 |
+| **時間戳記** | TIMESTAMP | TIMESTAMP | 日期時間，精確到毫秒 |
+
+#### 約束條件說明
+
+| 約束類型 | 說明 | 範例 |
+|---------|------|------|
+| **PRIMARY KEY** | 主鍵，唯一且非空 | `id VARCHAR(36) PRIMARY KEY` |
+| **FOREIGN KEY** | 外鍵，參照其他資料表 | `FOREIGN KEY (tree_id) REFERENCES decision_trees(id)` |
+| **UNIQUE** | 唯一約束，不允許重複值 | `request_id VARCHAR(36) UNIQUE` |
+| **NOT NULL** | 非空約束，必須有值 | `name VARCHAR(100) NOT NULL` |
+| **DEFAULT** | 預設值 | `created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP` |
+
+#### 狀態欄位值域
+
+| 資料表 | 欄位 | 可能值 | 說明 |
+|--------|------|--------|------|
+| **decision_trees** | status | ACTIVE, INACTIVE, DRAFT | 啟用、停用、草稿 |
+| **promotion_rules** | status | ACTIVE, INACTIVE | 啟用、停用 |
+| **promotion_rules** | rule_type | SPEL, DROOLS, HARDCODED | SpEL表達式、Drools規則、硬編碼 |
+| **decision_nodes** | node_type | CONDITION, CALCULATION | 條件節點、計算節點 |
+| **audit_trails** | status | SUCCESS, FAILED, PENDING | 成功、失敗、處理中 |
+| **decision_steps** | status | SUCCESS, FAILED | 成功、失敗 |
+| **system_events** | severity_level | INFO, WARN, ERROR, CRITICAL | 資訊、警告、錯誤、嚴重 |
+| **system_events** | event_category | SYSTEM, BUSINESS, SECURITY | 系統、業務、安全 |
+
+#### JSON 欄位結構範例
+
+##### decision_nodes.configuration
+```json
+{
+  "commandType": "SPEL_CONDITION",
+  "expression": "#{accountType == 'VIP'}",
+  "description": "VIP客戶判斷",
+  "parameters": {
+    "timeout": 5000,
+    "retryCount": 3
+  }
+}
+```
+
+##### promotion_rules.parameters
+```json
+{
+  "discountAmount": 5000,
+  "discountPercentage": 10.0,
+  "maxDiscount": 50000,
+  "validDays": 30,
+  "applicableRegions": ["台北市", "新北市"]
+}
+```
+
+##### promotion_history.promotion_result
+```json
+{
+  "promotionId": "promo-vip-001",
+  "promotionName": "VIP專屬優惠",
+  "discountAmount": 5000,
+  "eligible": true,
+  "validUntil": "2024-12-31T23:59:59",
+  "additionalDetails": {
+    "tier": "VIP",
+    "category": "premium"
+  }
+}
+```
+
+### 資料表統計資訊
+
+| 資料表 | 預估記錄數 | 成長率 | 保留期間 | 備註 |
+|--------|-----------|--------|----------|------|
+| **decision_trees** | < 100 | 低 | 永久 | 配置資料，變動少 |
+| **decision_nodes** | < 1,000 | 低 | 永久 | 配置資料，變動少 |
+| **promotion_rules** | < 500 | 中 | 永久 | 業務規則，定期更新 |
+| **promotion_history** | 100萬+ | 高 | 7年 | 交易記錄，快速成長 |
+| **request_logs** | 1000萬+ | 極高 | 3個月 | 請求日誌，需定期清理 |
+| **audit_trails** | 1000萬+ | 極高 | 7年 | 稽核記錄，法規要求 |
+| **decision_steps** | 5000萬+ | 極高 | 1年 | 詳細追蹤，可壓縮歸檔 |
+| **system_events** | 100萬+ | 高 | 6個月 | 系統日誌，定期清理 |
+
+### 效能優化建議
+
+#### 索引策略
+- **複合索引**: 針對常用查詢條件建立複合索引
+- **部分索引**: 對於有狀態篩選的查詢使用部分索引
+- **GIN索引**: PostgreSQL 的 JSON 欄位使用 GIN 索引
+
+#### 分割策略
+```sql
+-- 按時間分割大型資料表 (PostgreSQL)
+CREATE TABLE audit_trails_2024_01 PARTITION OF audit_trails
+FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
+
+CREATE TABLE audit_trails_2024_02 PARTITION OF audit_trails  
+FOR VALUES FROM ('2024-02-01') TO ('2024-03-01');
+```
+
+#### 資料清理策略
+```sql
+-- 定期清理舊的請求日誌 (保留3個月)
+DELETE FROM request_logs 
+WHERE created_at < CURRENT_DATE - INTERVAL '3 months';
+
+-- 歸檔舊的決策步驟 (保留1年)
+INSERT INTO decision_steps_archive 
+SELECT * FROM decision_steps 
+WHERE created_at < CURRENT_DATE - INTERVAL '1 year';
+
+DELETE FROM decision_steps 
+WHERE created_at < CURRENT_DATE - INTERVAL '1 year';
+```
+
+### 資料表摘要
+
+| 分類 | 資料表數量 | 主要用途 | 特性 |
+|------|-----------|----------|------|
+| **業務資料表** | 4個 | 核心業務邏輯和配置 | 資料量小，變動少，需要高可用性 |
+| **稽核資料表** | 4個 | 稽核追蹤和合規 | 資料量大，只增不改，需要長期保存 |
+| **總計** | 8個 | 完整的優惠推薦系統 | 支援高併發，確保資料一致性 |
 
 ## API 文檔
 
